@@ -990,8 +990,9 @@ function RestaurantCard({ r, selected, onClick, wishlist, toggleWishlist, notifs
 
 // ── Desktop detection hook ─────────────────────────────────────────────
 function useIsDesktop(breakpoint = 768) {
-  const [isDesktop, setIsDesktop] = useState(() => typeof window !== "undefined" && window.innerWidth >= breakpoint);
+  const [isDesktop, setIsDesktop] = useState(() => typeof window !== "undefined" && window.matchMedia(`(min-width: ${breakpoint}px)`).matches);
   useEffect(() => {
+    if (typeof window === "undefined") return;
     const mq = window.matchMedia(`(min-width: ${breakpoint}px)`);
     const handler = (e) => setIsDesktop(e.matches);
     mq.addEventListener("change", handler);
