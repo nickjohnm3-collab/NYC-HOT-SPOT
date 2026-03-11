@@ -1246,7 +1246,7 @@ export default function App() {
               <div style={{ fontSize:11, color:"rgba(237,220,216,0.5)", fontFamily:"'DM Sans',sans-serif", lineHeight:1.4 }}>
                 {installPrompt
                   ? "Get the full app experience — quick access from your home screen"
-                  : <>Tap <span style={{ display:"inline-flex", verticalAlign:"middle", background:"rgba(237,220,216,0.12)", borderRadius:4, padding:"1px 5px", fontSize:13 }}>⎙</span> then <b>"Add to Home Screen"</b></>
+                  : <>Tap <span style={{ display:"inline-flex", verticalAlign:"middle", background:"rgba(237,220,216,0.12)", borderRadius:4, padding:"2px 6px" }}><svg width="14" height="16" viewBox="0 0 14 16" fill="none" style={{display:"block"}}><path d="M7 0L7 10M7 0L3 4M7 0L11 4" stroke="rgba(237,220,216,0.9)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/><path d="M1 8V14H13V8" stroke="rgba(237,220,216,0.9)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg></span> then <b>"Add to Home Screen"</b></>
                 }
               </div>
             </div>
