@@ -638,321 +638,226 @@ function OpeningTimeline({ progress, openingMonth, color }) {
   );
 }
 
-const MAP_PINS = {
-  "Greenwich Village":{x:226,y:394},"NoMad":{x:264,y:298},"Flatiron":{x:250,y:318},
-  "Murray Hill":{x:282,y:294},"Lower East Side":{x:286,y:442},"East Village":{x:274,y:413},
-  "Union Square":{x:254,y:358},"West Village":{x:207,y:398},"Chelsea":{x:214,y:341},
-  "Midtown":{x:252,y:245},"SoHo":{x:238,y:458},"Lower Manhattan":{x:240,y:526},
-  "Tribeca":{x:230,y:487},"Harlem":{x:258,y:120},"Upper West Side":{x:206,y:182},
-  "Upper East Side":{x:303,y:182},"Hell's Kitchen":{x:209,y:245},
+// Neighborhood center coordinates for restaurants without specific addresses
+const HOOD_COORDS = {
+  "Greenwich Village":[40.7336,-74.0027],"NoMad":[40.7454,-73.9880],"Flatiron":[40.7410,-73.9896],
+  "Murray Hill":[40.7488,-73.9774],"Lower East Side":[40.7185,-73.9868],"East Village":[40.7265,-73.9818],
+  "Union Square":[40.7359,-73.9911],"West Village":[40.7338,-74.0030],"Chelsea":[40.7465,-74.0014],
+  "Midtown":[40.7549,-73.9840],"SoHo":[40.7233,-73.9985],"Lower Manhattan":[40.7075,-74.0113],
+  "Tribeca":[40.7163,-74.0086],"Harlem":[40.8116,-73.9465],"Upper West Side":[40.7870,-73.9754],
+  "Upper East Side":[40.7736,-73.9566],"Hell's Kitchen":[40.7638,-73.9918],
 };
 
+// Specific lat/lng for restaurants with known addresses
+const RESTAURANT_COORDS = {
+  17:[40.7562,-73.9845],  // Seventy Seven Alley - Midtown
+  4:[40.7494,-73.9765],   // Kjun - 334 Lexington Ave
+  3:[40.7405,-73.9920],   // Kidilum - 31 W 21st St
+  12:[40.7340,-74.0040],  // Kees - West Village
+  2:[40.7454,-73.9880],   // Ambassadors Clubhouse - 1245 Broadway
+  13:[40.7348,-74.0050],  // Cleo Downtown - West Village
+  7:[40.7240,-73.9845],   // Odo East Village - 536 E 5th St
+  5:[40.7188,-73.9840],   // Beto's Carnitas - 69 Clinton St
+  11:[40.7330,-74.0060],  // Umeko - West Village
+  14:[40.7342,-74.0055],  // Aperitivo by CARTA - West Village
+  9:[40.7291,-73.9876],   // Pizza Studio Tamaki - St. Marks Place
+  15:[40.7424,-73.9992],  // Seirēn - 94 7th Ave
+  8:[40.7247,-73.9793],   // Much Obliged - Alphabet City
+  1:[40.7322,-73.9970],   // Golden Steer - 1 Fifth Ave
+  16:[40.7544,-73.9890],  // Tacos La 36 - Midtown West
+  10:[40.7346,-73.9929],  // Rulin - 15 E 13th St
+  6:[40.7185,-73.9912],   // Bistrot Ha - 137 Eldridge St
+  24:[40.7321,-73.9989],  // Babbo - 1 Waverly Place
+  25:[40.7315,-74.0042],  // Wild Cherry - 38 Commerce St
+  26:[40.7190,-74.0096],  // Meadow Lane - 355 Greenwich St
+  27:[40.7253,-73.9780],  // Salumeria Rosi East Village - Avenue B
+  28:[40.7725,-73.9530],  // Kaia Wine Bar - 1446 First Ave
+  29:[40.7558,-73.9820],  // Double Knot - Midtown
+  30:[40.7364,-73.9890],  // Seahorse - 201 Park Ave S
+  31:[40.7609,-73.9886],  // Hwaro - 776 8th Ave
+  32:[40.7256,-73.9998],  // Or'esh - 450 West Broadway
+  33:[40.7310,-74.0040],  // The Eighty Six - 86 Bedford St
+  34:[40.7270,-73.9845],  // Adda - 107 1st Ave
+  35:[40.7261,-73.9899],  // Kabawa - 8 Extra Place
+  36:[40.7272,-74.0050],  // Cove - 299 W Houston St
+  40:[40.7540,-73.9994],  // Saverne - 531 W 34th St
+  41:[40.7565,-73.9812],  // Da Toscano - 49 W 44th St
+  42:[40.7354,-74.0000],  // Shin Takumi - 44 Greenwich Ave
+  43:[40.7260,-73.9870],  // Chubby Tan - 239 E 5th St
+  44:[40.7601,-73.9880],  // Bar Lola - 346 W 46th St
+  45:[40.7330,-74.0005],  // Birdie's - 152 7th Ave S
+  37:[40.7233,-73.9955],  // Oriana - 174 Mott St
+  38:[40.7238,-73.9960],  // Jeju Noodle Bar Nolita - 204 Elizabeth St
+  39:[40.7300,-74.0005],  // Dean's - 213 6th Ave
+  46:[40.7268,-73.9844],  // Good Time Country Buffet - 166 1st Ave
+  18:[40.7238,-74.0030],  // Straker's NYC - SoHo
+  19:[40.7075,-74.0113],  // Dishoom - Lower Manhattan
+  20:[40.7558,-73.9830],  // Uovo - Midtown
+  21:[40.7480,-73.9780],  // Oyatte - Murray Hill
+  22:[40.7620,-73.9870],  // Carver 48 - 305 W 48th St
+  23:[40.7233,-73.9965],  // RYE by Martin Auer - 285 Lafayette St
+};
+
+function getRestaurantCoords(r) {
+  if (RESTAURANT_COORDS[r.id]) return RESTAURANT_COORDS[r.id];
+  if (HOOD_COORDS[r.neighborhood]) return HOOD_COORDS[r.neighborhood];
+  return [40.7400, -73.9950]; // Manhattan fallback
+}
+
+const LEAFLET_CSS = "https://unpkg.com/leaflet@1.9.4/dist/leaflet.css";
+const LEAFLET_JS  = "https://unpkg.com/leaflet@1.9.4/dist/leaflet.js";
+let leafletLoaded = false;
+function loadLeaflet() {
+  if (leafletLoaded) return Promise.resolve();
+  return new Promise((resolve) => {
+    if (window.L) { leafletLoaded = true; resolve(); return; }
+    const link = document.createElement("link");
+    link.rel = "stylesheet"; link.href = LEAFLET_CSS;
+    document.head.appendChild(link);
+    const script = document.createElement("script");
+    script.src = LEAFLET_JS;
+    script.onload = () => { leafletLoaded = true; resolve(); };
+    document.head.appendChild(script);
+  });
+}
+
 function MapView({ restaurants, onSelect, selected }) {
-  const [pinVisible, setPinVisible] = useState({});
-  const [activeCard, setActiveCard] = useState(null);
-  const [activeIdx, setActiveIdx] = useState(0);
-  const byHood={};
-  restaurants.forEach(r=>{const key=MAP_PINS[r.neighborhood]?r.neighborhood:"Midtown";if(!byHood[key])byHood[key]=[];byHood[key].push(r);});
-  const hoodList = Object.keys(byHood);
-  const totalSpots = hoodList.length;
+  const mapRef = React.useRef(null);
+  const mapInstanceRef = React.useRef(null);
+  const markersRef = React.useRef([]);
+  const [ready, setReady] = React.useState(false);
 
-  // Animate pins dropping in on mount
-  useEffect(()=>{
-    hoodList.forEach((hood, i)=>{
-      setTimeout(()=>{
-        setPinVisible(prev=>({...prev,[hood]:true}));
-      }, i * 80 + 100);
+  // Load Leaflet on mount
+  useEffect(() => {
+    loadLeaflet().then(() => setReady(true));
+  }, []);
+
+  // Initialize map once Leaflet + DOM are ready
+  useEffect(() => {
+    if (!ready || !mapRef.current || mapInstanceRef.current) return;
+    const L = window.L;
+    const map = L.map(mapRef.current, {
+      center: [40.7380, -73.9950],
+      zoom: 13,
+      zoomControl: false,
+      attributionControl: false,
     });
-  },[restaurants.length]);
+    // Dark tile layer (CartoDB Dark Matter)
+    L.tileLayer("https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png", {
+      maxZoom: 19,
+    }).addTo(map);
+    L.control.zoom({ position: "bottomright" }).addTo(map);
+    L.control.attribution({ position: "bottomleft", prefix: false })
+      .addAttribution('&copy; <a href="https://www.openstreetmap.org/copyright">OSM</a> &copy; <a href="https://carto.com/">CARTO</a>')
+      .addTo(map);
+    mapInstanceRef.current = map;
+    // Fix tiles not loading in hidden/resized containers
+    setTimeout(() => map.invalidateSize(), 200);
+  }, [ready]);
 
-  const handlePinClick = (hood, rests, pos) => {
-    if (activeCard?.hood === hood) { setActiveCard(null); return; }
-    setActiveCard({ hood, rests, x: pos.x, y: pos.y });
-    setActiveIdx(hoodList.indexOf(hood));
-    onSelect(rests[0]);
-  };
+  // Update markers when restaurants change
+  useEffect(() => {
+    if (!ready || !mapInstanceRef.current) return;
+    const L = window.L;
+    const map = mapInstanceRef.current;
+    // Clear existing markers
+    markersRef.current.forEach(m => map.removeLayer(m));
+    markersRef.current = [];
 
-  const goTo = (dir) => {
-    const next = (activeIdx + dir + totalSpots) % totalSpots;
-    setActiveIdx(next);
-    const hood = hoodList[next];
-    const pos = MAP_PINS[hood] || {x:252,y:372};
-    const rests = byHood[hood];
-    setActiveCard({ hood, rests, x: pos.x, y: pos.y });
-    onSelect(rests[0]);
-  };
+    restaurants.forEach(r => {
+      const [lat, lng] = getRestaurantCoords(r);
+      const isSoon = r.status === "coming_soon";
+      const isBar = r.isBar;
+      const pinColor = isSoon ? "#8c64c8" : "#d4b050";
+      const borderColor = isSoon ? "#a080d0" : "#c4952e";
+      const icon = L.divIcon({
+        className: "",
+        iconSize: [28, 36],
+        iconAnchor: [14, 36],
+        popupAnchor: [0, -36],
+        html: `<div style="
+          width:28px;height:36px;position:relative;cursor:pointer;
+          filter:drop-shadow(0 2px 4px rgba(0,0,0,0.5));
+        ">
+          <svg viewBox="0 0 28 36" width="28" height="36">
+            <path d="M14,34 C14,34 3,22 3,13 A11,11 0 1,1 25,13 C25,22 14,34 14,34Z"
+              fill="${pinColor}" stroke="${borderColor}" stroke-width="1.5"/>
+            <circle cx="14" cy="13" r="5" fill="rgba(8,6,14,0.6)"/>
+            ${isBar ? '<text x="14" y="16" text-anchor="middle" fill="white" font-size="8" font-weight="bold" font-family="sans-serif">🍸</text>'
+              : isSoon ? '<text x="14" y="16" text-anchor="middle" fill="white" font-size="8" font-weight="bold" font-family="sans-serif">⏳</text>'
+              : '<circle cx="14" cy="13" r="2.5" fill="rgba(237,220,216,0.9)"/>'}
+          </svg>
+        </div>`,
+      });
+      const marker = L.marker([lat, lng], { icon }).addTo(map);
+      marker.bindPopup(`
+        <div style="font-family:'DM Sans',sans-serif;min-width:160px;">
+          <div style="font-size:14px;font-weight:700;margin-bottom:4px;font-family:'DM Serif Display',Georgia,serif;">${r.name}</div>
+          <div style="font-size:11px;color:#666;margin-bottom:2px;">${r.neighborhood} · ${r.cuisine}</div>
+          <div style="font-size:11px;color:#888;">${"$".repeat(r.price)} · ${isSoon ? `Opening ${r.openingMonth}` : "Open now"}</div>
+          ${r.address ? `<div style="font-size:10px;color:#999;margin-top:4px;">${r.address}</div>` : ""}
+        </div>
+      `, { className: "nyc-popup" });
+      marker.on("click", () => onSelect(r));
+      markersRef.current.push(marker);
+    });
+  }, [ready, restaurants, onSelect]);
 
-  const activeHood = hoodList[activeIdx];
+  // Pan to selected restaurant
+  useEffect(() => {
+    if (!ready || !mapInstanceRef.current || !selected) return;
+    const [lat, lng] = getRestaurantCoords(selected);
+    mapInstanceRef.current.setView([lat, lng], 15, { animate: true, duration: 0.5 });
+    // Open the popup for the selected marker
+    const idx = restaurants.findIndex(r => r.id === selected.id);
+    if (idx >= 0 && markersRef.current[idx]) {
+      markersRef.current[idx].openPopup();
+    }
+  }, [ready, selected]);
 
   return (
-    <div style={{ borderRadius:16, background:"#04030a", position:"relative" }}>
-
-      {/* ── Navigation arrows bar ── */}
+    <div style={{ borderRadius:16, overflow:"hidden", background:"#04030a", position:"relative" }}>
+      {/* Legend bar */}
       <div style={{
-        display:"flex", alignItems:"center", justifyContent:"space-between",
-        padding:"10px 16px 8px",
+        display:"flex", alignItems:"center", justifyContent:"center", gap:20,
+        padding:"8px 16px",
         background:"linear-gradient(180deg,rgba(20,12,28,0.98),rgba(16,10,22,0.92))",
-        borderBottom:"1px solid rgba(192,50,88,0.15)",
-        borderRadius:"14px 14px 0 0",
+        borderBottom:"1px solid rgba(237,220,216,0.08)",
       }}>
-        {/* Prev arrow */}
-        <button onClick={()=>goTo(-1)} style={{
-          background:"linear-gradient(135deg,rgba(192,50,88,0.15),rgba(120,20,40,0.2))",
-          border:"1px solid rgba(192,50,88,0.3)", borderRadius:10,
-          width:38, height:38, cursor:"pointer", display:"flex", alignItems:"center",
-          justifyContent:"center", color:"#e8a8b8", fontSize:18, flexShrink:0,
-          transition:"all 0.2s",
-        }}>‹</button>
-
-        {/* Center: spot counter + name */}
-        <div style={{ flex:1, textAlign:"center", padding:"0 12px" }}>
-          {activeCard ? (<>
-            <div style={{
-              fontSize:9, fontWeight:700, letterSpacing:3, textTransform:"uppercase",
-              color:"rgba(192,50,88,0.7)", fontFamily:"'DM Sans',sans-serif", marginBottom:2,
-            }}>
-              {activeIdx+1} of {totalSpots} · {activeHood}
-            </div>
-            <div style={{
-              display:"flex", justifyContent:"center", gap:4, flexWrap:"wrap",
-            }}>
-              {(byHood[activeHood]||[]).slice(0,3).map((r,i)=>(
-                <span key={r.id} style={{
-                  fontSize:10, color:"rgba(237,220,216,0.6)",
-                  fontFamily:"'DM Serif Display',Georgia,serif",
-                }}>{i>0?"· ":""}{r.name}</span>
-              ))}
-              {(byHood[activeHood]||[]).length>3 && (
-                <span style={{fontSize:10,color:"rgba(237,220,216,0.3)",fontFamily:"'DM Sans',sans-serif"}}>
-                  +{(byHood[activeHood]||[]).length-3} more
-                </span>
-              )}
-            </div>
-          </>) : (
-            <div style={{
-              fontSize:10, color:"rgba(237,220,216,0.3)",
-              fontFamily:"'DM Sans',sans-serif", letterSpacing:1,
-            }}>Tap a pin · or use arrows to browse {totalSpots} neighborhoods</div>
-          )}
+        <div style={{ display:"flex", alignItems:"center", gap:6 }}>
+          <span style={{ width:10, height:10, borderRadius:"50%", background:"#d4b050", display:"inline-block" }}/>
+          <span style={{ fontSize:10, color:"rgba(237,220,216,0.5)", fontFamily:"'DM Sans',sans-serif" }}>Open</span>
         </div>
-
-        {/* Next arrow */}
-        <button onClick={()=>goTo(1)} style={{
-          background:"linear-gradient(135deg,rgba(192,50,88,0.15),rgba(120,20,40,0.2))",
-          border:"1px solid rgba(192,50,88,0.3)", borderRadius:10,
-          width:38, height:38, cursor:"pointer", display:"flex", alignItems:"center",
-          justifyContent:"center", color:"#e8a8b8", fontSize:18, flexShrink:0,
-          transition:"all 0.2s",
-        }}>›</button>
+        <div style={{ display:"flex", alignItems:"center", gap:6 }}>
+          <span style={{ width:10, height:10, borderRadius:"50%", background:"#8c64c8", display:"inline-block" }}/>
+          <span style={{ fontSize:10, color:"rgba(237,220,216,0.5)", fontFamily:"'DM Sans',sans-serif" }}>Coming Soon</span>
+        </div>
+        <span style={{ fontSize:10, color:"rgba(237,220,216,0.25)", fontFamily:"'DM Sans',sans-serif" }}>
+          {restaurants.length} spots
+        </span>
       </div>
-      <svg viewBox="130 30 260 580" style={{ width:"100%", display:"block", height:"auto", aspectRatio:"260/580", minHeight:"700px", border:"1px solid rgba(237,220,216,0.08)", borderRadius:14 }}>
-        <defs>
-          <radialGradient id="mapbg" cx="50%" cy="45%" r="65%">
-            <stop offset="0%" stopColor="#1a1228"/>
-            <stop offset="100%" stopColor="#060410"/>
-          </radialGradient>
-          <radialGradient id="glowgold" cx="50%" cy="50%" r="50%">
-            <stop offset="0%" stopColor="#9a7420" stopOpacity="0.35"/>
-            <stop offset="100%" stopColor="#9a7420" stopOpacity="0"/>
-          </radialGradient>
-          <radialGradient id="glowpink" cx="50%" cy="50%" r="50%">
-            <stop offset="0%" stopColor="#c03258" stopOpacity="0.3"/>
-            <stop offset="100%" stopColor="#c03258" stopOpacity="0"/>
-          </radialGradient>
-          <filter id="pinblur"><feGaussianBlur stdDeviation="2.5"/></filter>
-          <filter id="softglow"><feGaussianBlur stdDeviation="3" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
-        </defs>
-
-        {/* Background */}
-        <rect width="500" height="640" fill="url(#mapbg)"/>
-
-        {/* Subtle grid */}
-        {[80,130,180,230,280,330,380,430,480,530,580].map(y=>(
-          <line key={`h${y}`} x1="140" y1={y} x2="360" y2={y} stroke="rgba(237,220,216,0.025)" strokeWidth="0.6"/>
-        ))}
-        {[160,190,220,250,280,310,340].map(x=>(
-          <line key={`v${x}`} x1={x} y1="50" x2={x} y2="590" stroke="rgba(237,220,216,0.025)" strokeWidth="0.6"/>
-        ))}
-
-        {/* Hudson River glow */}
-        <ellipse cx="145" cy="340" rx="38" ry="200" fill="rgba(30,50,90,0.18)"/>
-        <ellipse cx="145" cy="340" rx="18" ry="180" fill="rgba(40,70,120,0.12)"/>
-
-        {/* East River glow */}
-        <ellipse cx="358" cy="350" rx="28" ry="190" fill="rgba(30,50,90,0.14)"/>
-
-        {/* Manhattan island — detailed outline */}
-        <path d="
-          M228 42 L248 38 L268 40 L288 50 L300 64 L306 82 L308 102
-          L304 122 L306 142 L308 162 L310 182 L308 202 L312 222
-          L314 242 L312 262 L316 282 L314 302 L312 322
-          L308 342 L306 362 L302 382 L296 402 L288 422
-          L278 442 L266 458 L254 472 L242 482 L230 490
-          L218 494 L208 488 L198 476 L190 460 L184 442
-          L178 422 L174 402 L170 382 L168 362 L166 342
-          L164 322 L162 302 L160 282 L158 262 L156 242
-          L154 222 L152 202 L150 182 L150 162 L148 142
-          L148 122 L148 102 L150 82 L154 64 L162 50
-          L176 42 L200 38 Z
-        " fill="rgba(22,16,36,0.95)" stroke="rgba(237,220,216,0.14)" strokeWidth="1.4"/>
-
-        {/* Parks — Central Park */}
-        <rect x="212" y="138" width="90" height="82" rx="8"
-          fill="rgba(30,55,32,0.45)" stroke="rgba(60,100,60,0.2)" strokeWidth="0.8"/>
-        <text x="257" y="183" fontSize="11" fill="rgba(80,140,80,0.65)"
-          textAnchor="middle" fontFamily="'DM Sans',sans-serif" fontStyle="italic">Central Park</text>
-
-        {/* Riverside Park */}
-        <rect x="152" y="138" width="14" height="110" rx="4"
-          fill="rgba(30,55,32,0.3)" stroke="rgba(60,100,60,0.15)" strokeWidth="0.6"/>
-
-        {/* Streets — a few iconic ones */}
-        {/* 5th Ave */}
-        <line x1="260" y1="232" x2="245" y2="490" stroke="rgba(237,220,216,0.06)" strokeWidth="1"/>
-        <text x="273" y="350" fontSize="9" fill="rgba(237,220,216,0.18)" textAnchor="middle"
-          fontFamily="'DM Sans',sans-serif" transform="rotate(-3,273,350)">5th Ave</text>
-        {/* Broadway diagonal */}
-        <line x1="252" y1="224" x2="218" y2="490" stroke="rgba(237,220,216,0.05)" strokeWidth="0.8" strokeDasharray="4,4"/>
-
-        {/* Neighborhood labels */}
-        {[
-          ["Harlem",258,110],["Upper West Side",193,192],["Upper East Side",308,192],
-          ["Hell's Kitchen",196,256],["Midtown",264,236],
-          ["Chelsea",200,350],["Flatiron",264,308],["NoMad",272,288],
-          ["West Village",194,408],["Greenwich Village",224,383],
-          ["East Village",280,402],["Lower East Side",292,432],
-          ["SoHo",234,448],["Tribeca",224,478],["Lower Manhattan",238,516],
-          ["Murray Hill",286,284],["Union Square",256,348],
-        ].map(([lbl,x,y])=>(
-          <text key={lbl} x={x} y={y} fontSize="6.2" fill="rgba(237,220,216,0.13)"
-            textAnchor="middle" fontFamily="'DM Serif Display',Georgia,serif" fontStyle="italic">{lbl}</text>
-        ))}
-
-        {/* Landmark dots */}
-        {[
-          {name:"Empire State",x:262,y:302},{name:"Chrysler",x:278,y:274},
-          {name:"One WTC",x:236,y:506},{name:"Flatiron Bldg",x:254,y:326},
-        ].map(lm=>(
-          <g key={lm.name}>
-            <circle cx={lm.x} cy={lm.y} r={2} fill="rgba(237,220,216,0.2)"/>
-          </g>
-        ))}
-
-        {/* Pins */}
-        {Object.entries(byHood).map(([hood,rests])=>{
-          const pos=MAP_PINS[hood]||{x:252,y:372};
-          const isSel = activeCard?.hood === hood;
-          const soon = rests.every(r=>r.status==="coming_soon");
-          const cnt = rests.length;
-          const visible = pinVisible[hood];
-          const pinY = visible ? pos.y : pos.y - 28;
-          const pinOpacity = visible ? 1 : 0;
-          const glowColor = soon ? "glowpink" : "glowgold";
-          const pinColor = soon ? "rgba(140,100,200,0.9)" : isSel ? "#e8c86a" : "rgba(212,176,80,0.92)";
-          const pinStroke = isSel ? "#fff" : "rgba(237,220,216,0.35)";
-
-          return (
-            <g key={hood}
-              onClick={()=>handlePinClick(hood, rests, pos)}
-              style={{cursor:"pointer", transition:"opacity 0.4s", opacity:pinOpacity}}
-            >
-              {/* Glow halo */}
-              {isSel && <circle cx={pos.x} cy={pos.y} r={32} fill={`url(#${glowColor})`} filter="url(#pinblur)"/>}
-              <circle cx={pos.x} cy={pos.y} r={isSel?26:18} fill={`url(#${glowColor})`} opacity={0.6}/>
-
-              {/* Pin shadow */}
-              <ellipse cx={pos.x} cy={pinY+20} rx={cnt>1?13:9} ry={3.5}
-                fill="rgba(0,0,0,0.45)" filter="url(#pinblur)"
-                style={{transform:`translateY(0)`, transition:"all 0.5s cubic-bezier(0.34,1.56,0.64,1)"}}/>
-
-              {/* Pin body */}
-              <g transform={`translate(0,${visible ? 0 : -28})`} style={{
-                opacity: pinOpacity,
-                transition:"opacity 0.3s ease",
-              }}>
-                {/* Teardrop pin shape */}
-                <path
-                  d={`M${pos.x},${pinY+17} C${pos.x-11},${pinY+6} ${pos.x-11},${pinY-10} ${pos.x},${pinY-16} C${pos.x+11},${pinY-10} ${pos.x+11},${pinY+6} ${pos.x},${pinY+17}Z`}
-                  fill={pinColor}
-                  stroke={pinStroke}
-                  strokeWidth={isSel?1.8:1}
-                  filter={isSel?"url(#softglow)":undefined}
-                />
-                {/* Count or icon */}
-                {cnt>1
-                  ? <text x={pos.x} y={pinY+4} fontSize="11" fill="#110c18" textAnchor="middle"
-                      fontWeight="800" fontFamily="'DM Sans',sans-serif">{cnt}</text>
-                  : <circle cx={pos.x} cy={pinY} r={4} fill="rgba(8,6,14,0.7)"/>
-                }
-              </g>
-            </g>
-          );
-        })}
-
-        {/* Legend */}
-        <rect x="148" y="602" width="210" height="28" rx="7" fill="rgba(8,6,14,0.7)" stroke="rgba(237,220,216,0.08)" strokeWidth="0.8"/>
-        <circle cx="166" cy="616" r="5" fill="rgba(212,176,80,0.9)"/>
-        <text x="176" y="620" fontSize="12" fill="rgba(237,220,216,0.5)" fontFamily="'DM Sans',sans-serif">Recently Opened</text>
-        <circle cx="270" cy="616" r="5" fill="rgba(140,100,200,0.85)"/>
-        <text x="278" y="620" fontSize="12" fill="rgba(237,220,216,0.5)" fontFamily="'DM Sans',sans-serif">Coming Soon</text>
-      </svg>
-
-      {/* Floating tap card */}
-      {activeCard && (()=>{
-        const card = activeCard;
-        const isRight = card.x < 260;
-        return (
-          <div style={{
-            position:"absolute",
-            top: `${(card.y / 640) * 100}%`,
-            left: isRight ? `${(card.x / 500)*100 + 8}%` : "auto",
-            right: isRight ? "auto" : `${((500 - card.x) / 500)*100 + 8}%`,
-            transform:"translateY(-50%)",
-            background:"linear-gradient(135deg,rgba(24,16,36,0.97),rgba(14,10,22,0.97))",
-            border:"1px solid rgba(212,176,80,0.3)",
-            borderRadius:12,
-            padding:"12px 14px",
-            minWidth:148,
-            maxWidth:180,
-            boxShadow:"0 8px 32px rgba(0,0,0,0.6), 0 0 0 1px rgba(212,176,80,0.1)",
-            zIndex:10,
-            pointerEvents:"auto",
-          }}>
-            {/* Close button */}
-            <button onClick={(e)=>{e.stopPropagation();setActiveCard(null);}} style={{
-              position:"absolute",top:6,right:8,background:"none",border:"none",
-              color:"rgba(237,220,216,0.35)",fontSize:13,cursor:"pointer",lineHeight:1,padding:0
-            }}>✕</button>
-            {/* Hood name */}
-            <div style={{fontSize:8,fontWeight:700,letterSpacing:2,textTransform:"uppercase",
-              color:"rgba(212,176,80,0.7)",fontFamily:"'DM Sans',sans-serif",marginBottom:8}}>
-              {card.hood}
-            </div>
-            {/* Restaurant list */}
-            {card.rests.slice(0,5).map((r,i)=>(
-              <div key={r.id} onClick={()=>{onSelect(r);}}
-                style={{
-                  padding:"5px 0",
-                  borderBottom: i<Math.min(card.rests.length,5)-1 ? "1px solid rgba(237,220,216,0.06)" : "none",
-                  cursor:"pointer",
-                }}>
-                <div style={{fontSize:11.5,fontWeight:600,color:"rgba(237,220,216,0.9)",
-                  fontFamily:"'DM Serif Display',Georgia,serif"}}>{r.name}</div>
-                <div style={{fontSize:9,color:"rgba(237,220,216,0.38)",fontFamily:"'DM Sans',sans-serif",marginTop:1}}>
-                  {r.cuisine} · {r.status==="coming_soon"
-                    ? <span style={{color:"rgba(160,130,210,0.8)"}}>{r.openingMonth}</span>
-                    : <span style={{color:"rgba(154,116,32,0.8)"}}>Open now</span>}
-                </div>
-              </div>
-            ))}
-            {card.rests.length>5 && (
-              <div style={{fontSize:9,color:"rgba(237,220,216,0.25)",marginTop:6,fontFamily:"'DM Sans',sans-serif"}}>
-                +{card.rests.length-5} more
-              </div>
-            )}
-          </div>
-        );
-      })()}
+      <div ref={mapRef} style={{ width:"100%", height:640, background:"#0a0a0c" }}/>
+      <style>{`
+        .nyc-popup .leaflet-popup-content-wrapper {
+          background: rgba(20,14,30,0.96);
+          color: #ede0d8;
+          border: 1px solid rgba(212,176,80,0.3);
+          border-radius: 10px;
+          box-shadow: 0 8px 32px rgba(0,0,0,0.6);
+        }
+        .nyc-popup .leaflet-popup-tip {
+          background: rgba(20,14,30,0.96);
+          border: 1px solid rgba(212,176,80,0.2);
+        }
+        .nyc-popup .leaflet-popup-close-button {
+          color: rgba(237,220,216,0.4);
+        }
+        .leaflet-control-zoom a {
+          background: rgba(20,14,30,0.9) !important;
+          color: rgba(237,220,216,0.7) !important;
+          border-color: rgba(237,220,216,0.1) !important;
+        }
+      `}</style>
     </div>
   );
 }
