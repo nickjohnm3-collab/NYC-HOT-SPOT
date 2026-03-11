@@ -988,7 +988,20 @@ function RestaurantCard({ r, selected, onClick, wishlist, toggleWishlist, notifs
   );
 }
 
+// ── Desktop detection hook ─────────────────────────────────────────────
+function useIsDesktop(breakpoint = 768) {
+  const [isDesktop, setIsDesktop] = useState(() => typeof window !== "undefined" && window.innerWidth >= breakpoint);
+  useEffect(() => {
+    const mq = window.matchMedia(`(min-width: ${breakpoint}px)`);
+    const handler = (e) => setIsDesktop(e.matches);
+    mq.addEventListener("change", handler);
+    return () => mq.removeEventListener("change", handler);
+  }, [breakpoint]);
+  return isDesktop;
+}
+
 export default function App() {
+  const isDesktop = useIsDesktop();
   // ── Persistent storage using artifact storage API ──────────────────────
   const [store, setStore] = React.useState({});
   const [storeReady, setStoreReady] = React.useState(false);
@@ -1108,30 +1121,55 @@ export default function App() {
     <div style={{ minHeight:"100vh", background:"radial-gradient(ellipse at 20% 0%,#160a10 0%,#080509 50%,#050308 100%)", color:CREAM, fontFamily:"'DM Sans',sans-serif" }}>
 
       {/* ── STICKY TITLE ── */}
-      <div style={{ position:"sticky", top:0, zIndex:100, background:"rgba(8,5,10,0.94)", backdropFilter:"blur(14px)", borderBottom:`1px solid rgba(237,220,216,0.08)`, padding:"8px 12px 20px", overflow:"visible", clipPath:"none" }}>
-        <div style={{ maxWidth:1080, margin:"0 auto", textAlign:"center", overflow:"visible" }}>
-          <div style={{ fontSize:9, fontWeight:700, letterSpacing:4, textTransform:"uppercase", color:CREAM_SUB, marginBottom:1 }}>Manhattan · 2026</div>
-          <h1 style={{
-            fontFamily:"'Playfair Display SC', Georgia, serif",
-            fontSize:"clamp(44px,11vw,96px)",
-            fontWeight:700,
-            margin:"2px 0 0 0", lineHeight:1.1, paddingBottom:"14px",
-            background:"linear-gradient(135deg,#f8ede6 0%,#e8a8b8 30%,#c03258 65%,#7a1025 100%)",
-            WebkitBackgroundClip:"text", WebkitTextFillColor:"transparent",
-            letterSpacing:2,
-            fontStyle:"italic",
-            display:"block", width:"100%", textAlign:"center",
-            whiteSpace:"nowrap",
-            transform:"scaleX(0.92)",
-            transformOrigin:"center",
-            filter:"drop-shadow(0 3px 16px rgba(192,50,88,0.3))",
-          }}>NYC Hot Spot</h1>
+      <div style={{ position:"sticky", top:0, zIndex:100, background:"rgba(8,5,10,0.94)", backdropFilter:"blur(14px)", borderBottom:`1px solid rgba(237,220,216,0.08)`, padding:isDesktop?"8px 24px 12px":"8px 12px 20px", overflow:"visible", clipPath:"none" }}>
+        <div style={{ maxWidth:isDesktop?1320:1080, margin:"0 auto", overflow:"visible", ...(isDesktop?{display:"flex",alignItems:"center",justifyContent:"space-between",gap:24}:{textAlign:"center"}) }}>
+          {/* Left: branding */}
+          <div style={{ ...(isDesktop?{flex:"0 0 auto",textAlign:"left"}:{}) }}>
+            <div style={{ fontSize:9, fontWeight:700, letterSpacing:4, textTransform:"uppercase", color:CREAM_SUB, marginBottom:1 }}>Manhattan · 2026</div>
+            <h1 style={{
+              fontFamily:"'Playfair Display SC', Georgia, serif",
+              fontSize:isDesktop?"clamp(32px,4vw,52px)":"clamp(44px,11vw,96px)",
+              fontWeight:700,
+              margin:"2px 0 0 0", lineHeight:1.1, paddingBottom:isDesktop?"0":"14px",
+              background:"linear-gradient(135deg,#f8ede6 0%,#e8a8b8 30%,#c03258 65%,#7a1025 100%)",
+              WebkitBackgroundClip:"text", WebkitTextFillColor:"transparent",
+              letterSpacing:2,
+              fontStyle:"italic",
+              display:"block", textAlign:isDesktop?"left":"center",
+              whiteSpace:"nowrap",
+              transform:"scaleX(0.92)",
+              transformOrigin:isDesktop?"left center":"center",
+              filter:"drop-shadow(0 3px 16px rgba(192,50,88,0.3))",
+            }}>NYC Hot Spot</h1>
+          </div>
+          {/* Right: desktop navigation */}
+          {isDesktop&&(
+            <nav style={{ display:"flex", alignItems:"center", gap:4 }}>
+              {[
+                { key:"home", label:"Home", icon:(<svg width="18" height="18" viewBox="0 0 110 110"><text x="55" y="68" fontFamily="Georgia,serif" fontSize="52" fontStyle="italic" fontWeight="700" fill={mainView==="home"?"#e8a8b8":"rgba(237,220,216,0.5)"} textAnchor="middle" letterSpacing="-3">HS</text></svg>) },
+                { key:"reminders", label:"Reminders", icon:"🔔", badge:reminderRestaurants.length },
+                { key:"wishlist", label:"Wish List", icon:"★", badge:wishlist.length },
+              ].map(({key,label,icon,badge})=>(
+                <button key={key} onClick={()=>setMainView(key)} style={{
+                  background:mainView===key?"rgba(180,80,90,0.18)":"transparent",
+                  border:`1px solid ${mainView===key?"rgba(180,80,90,0.4)":"transparent"}`,
+                  borderRadius:10, padding:"8px 18px",
+                  cursor:"pointer", display:"flex", alignItems:"center", gap:8, position:"relative",
+                  transition:"all 0.2s",
+                }}>
+                  <span style={{ fontSize:16, lineHeight:1, display:"flex", alignItems:"center", filter:mainView===key?"none":"grayscale(1) opacity(0.5)" }}>{icon}</span>
+                  <span style={{ fontSize:13, fontWeight:600, letterSpacing:0.5, fontFamily:"'DM Sans',sans-serif", color:mainView===key?"rgba(212,176,80,0.95)":"rgba(237,220,216,0.45)", transition:"color 0.2s" }}>{label}</span>
+                  {badge>0&&<span style={{ background:"rgba(180,80,90,0.9)", color:"#fff", fontSize:9, fontWeight:700, borderRadius:"50%", width:16, height:16, display:"flex", alignItems:"center", justifyContent:"center", fontFamily:"'DM Sans',sans-serif" }}>{badge}</span>}
+                </button>
+              ))}
+            </nav>
+          )}
         </div>
       </div>
 
       {/* ── SUB-HEADER (scrolls) ── */}
       {mainView==="home"&&<div style={{ background:"linear-gradient(180deg,rgba(180,80,90,0.07) 0%,transparent 100%)", padding:"22px 24px 20px" }}>
-        <div style={{ maxWidth:1080, margin:"0 auto", textAlign:"center" }}>
+        <div style={{ maxWidth:isDesktop?1320:1080, margin:"0 auto", textAlign:"center" }}>
           <p style={{ margin:"0 0 16px 0", fontSize:15, fontWeight:400, color:CREAM_MID }}>Manhattan's newest restaurants &amp; bars, curated daily</p>
           <div style={{ width:50, height:1, background:`linear-gradient(90deg,transparent,rgba(237,220,216,0.28),transparent)`, margin:"0 auto 16px" }}/>
           <div style={{ display:"flex", justifyContent:"center", alignItems:"center", gap:14, flexWrap:"wrap" }}>
@@ -1141,7 +1179,7 @@ export default function App() {
         </div>
       </div>}
 
-      <div style={{ maxWidth:1080, margin:"0 auto", padding:"0 20px 90px" }}>
+      <div style={{ maxWidth:isDesktop?1320:1080, margin:"0 auto", padding:isDesktop?"0 32px 48px":"0 20px 90px" }}>
 
         {showAI&&(
           <div style={{ background:"linear-gradient(145deg,rgba(22,8,14,0.98),rgba(10,5,9,0.99))", border:`1px solid rgba(237,220,216,0.1)`, borderRadius:16, padding:"18px 22px", marginBottom:20 }}>
@@ -1157,7 +1195,7 @@ export default function App() {
 
         {mainView==="home"&&<>
         {/* ── SEARCH BAR ── */}
-        <div style={{ maxWidth:700, margin:"0 auto 10px", position:"relative" }}>
+        <div style={{ maxWidth:isDesktop?900:700, margin:"0 auto 10px", position:"relative" }}>
           <input
             type="text"
             placeholder="Search by name, cuisine, or neighborhood…"
@@ -1181,7 +1219,7 @@ export default function App() {
 
         {/* ── UNIFIED CONTROLS PANEL ── */}
         <div style={{ display:"flex", flexDirection:"column", alignItems:"center", marginBottom:20 }}>
-          <div style={{ background:"rgba(237,220,216,0.04)", border:`1px solid rgba(237,220,216,0.11)`, borderRadius:16, overflow:"hidden", width:"100%", maxWidth:700 }}>
+          <div style={{ background:"rgba(237,220,216,0.04)", border:`1px solid rgba(237,220,216,0.11)`, borderRadius:16, overflow:"hidden", width:"100%", maxWidth:isDesktop?900:700 }}>
             {/* Tabs */}
             <div style={{ display:"flex", borderBottom:`1px solid rgba(237,220,216,0.08)` }}>
               {[{key:"open",label:"Recently Opened",cnt:recentCount},{key:"coming_soon",label:"Coming Soon",cnt:soonCnt}].map((t,i)=>(
@@ -1211,7 +1249,7 @@ export default function App() {
             </div>
           </div>
           {filtersOpen&&(
-            <div style={{ display:"flex", gap:10, marginTop:8, padding:"12px 14px", background:"rgba(237,220,216,0.04)", border:`1px solid rgba(237,220,216,0.1)`, borderRadius:12, flexWrap:"wrap", alignItems:"center", width:"100%", maxWidth:700 }}>
+            <div style={{ display:"flex", gap:10, marginTop:8, padding:"12px 14px", background:"rgba(237,220,216,0.04)", border:`1px solid rgba(237,220,216,0.1)`, borderRadius:12, flexWrap:"wrap", alignItems:"center", width:"100%", maxWidth:isDesktop?900:700 }}>
               <div style={{ flex:1, minWidth:130, position:"relative" }}>
                 <select value={neighborhood} onChange={e=>{setNeighborhood(e.target.value);}} style={selStyle}>
                   <option value="All" style={{ background:"#100810" }}>Neighborhood</option>
@@ -1240,9 +1278,9 @@ export default function App() {
         </div>
 
         {viewMode==="map"?(
-          <div style={{ display:"grid", gridTemplateColumns:"minmax(260px,1fr) minmax(300px,1.1fr)", gap:20, alignItems:"start" }}>
+          <div style={{ display:"grid", gridTemplateColumns:isDesktop?"minmax(400px,1.2fr) minmax(400px,1fr)":"minmax(260px,1fr) minmax(300px,1.1fr)", gap:20, alignItems:"start" }}>
             <MapView restaurants={sorted} onSelect={r=>setSelected(selected?.id===r.id?null:r)} selected={selected}/>
-            <div style={{ display:"flex", flexDirection:"column", gap:12, maxHeight:640, overflowY:"auto", paddingRight:4 }}>
+            <div style={{ display:"flex", flexDirection:"column", gap:12, maxHeight:isDesktop?"calc(100vh - 180px)":640, overflowY:"auto", paddingRight:4 }}>
               {sorted.length===0?<div style={{ textAlign:"center", padding:"40px", color:CREAM_SUB }}>No results</div>:sorted.map(r=><RestaurantCard key={r.id} r={r} selected={selected} onClick={setSelected} wishlist={wishlist} toggleWishlist={toggleWishlist} notifs={store.notifs||[]} saveNotif={saveNotif} removeNotif={removeNotif}/>)}
             </div>
           </div>
@@ -1250,8 +1288,8 @@ export default function App() {
           <>
             <div style={{
               display:"grid",
-              gridTemplateColumns:"repeat(auto-fill, minmax(340px, 1fr))",
-              gap:14,
+              gridTemplateColumns:isDesktop?"repeat(auto-fill, minmax(380px, 1fr))":"repeat(auto-fill, minmax(340px, 1fr))",
+              gap:isDesktop?18:14,
               alignItems:"stretch",
             }}>
               {sorted.length===0
@@ -1271,13 +1309,13 @@ export default function App() {
 
       {/* ── MY REMINDERS VIEW ── */}
       {mainView==="reminders"&&(
-        <div style={{ position:"fixed", top:0, left:0, right:0, bottom:0, background:"radial-gradient(ellipse at 20% 0%,#160a10 0%,#080509 50%,#050308 100%)", overflowY:"auto", zIndex:50, paddingTop:120, paddingBottom:90 }}>
-        <div style={{ maxWidth:1080, margin:"0 auto", padding:"0 20px" }}>
-          <h2 style={{ fontFamily:"'DM Serif Display',Georgia,serif", fontSize:24, fontWeight:400, color:"#ede0d8", marginBottom:4, marginTop:0 }}>My Reminders</h2>
-          <p style={{ fontSize:13, color:"rgba(237,220,216,0.46)", marginBottom:16, fontFamily:"'DM Sans',sans-serif" }}>Restaurants you've set opening notifications for.</p>
+        <div style={{ position:"fixed", top:0, left:0, right:0, bottom:0, background:"radial-gradient(ellipse at 20% 0%,#160a10 0%,#080509 50%,#050308 100%)", overflowY:"auto", zIndex:50, paddingTop:120, paddingBottom:isDesktop?48:90 }}>
+        <div style={{ maxWidth:isDesktop?1320:1080, margin:"0 auto", padding:isDesktop?"0 32px":"0 20px" }}>
+          <h2 style={{ fontFamily:"'DM Serif Display',Georgia,serif", fontSize:isDesktop?28:24, fontWeight:400, color:"#ede0d8", marginBottom:4, marginTop:0 }}>My Reminders</h2>
+          <p style={{ fontSize:13, color:"rgba(237,220,216,0.46)", marginBottom:isDesktop?24:16, fontFamily:"'DM Sans',sans-serif" }}>Restaurants you've set opening notifications for.</p>
           {reminderRestaurants.length===0
             ?<div style={{ textAlign:"center", padding:"60px 20px", color:"rgba(237,220,216,0.28)", fontSize:15, fontFamily:"'DM Sans',sans-serif" }}>No reminders set yet. Hit "Notify me" on any Coming Soon card.</div>
-            :<div style={{ display:"flex", flexDirection:"column", gap:12 }}>
+            :<div style={{ display:"grid", gridTemplateColumns:isDesktop?"repeat(auto-fill, minmax(380px, 1fr))":"1fr", gap:isDesktop?18:12 }}>
               {reminderRestaurants.map(r=>(
                 <div key={r.id}>
                   <RestaurantCard r={r} selected={null} onClick={()=>{}} wishlist={wishlist} toggleWishlist={toggleWishlist} notifs={store.notifs||[]} saveNotif={saveNotif} removeNotif={removeNotif} compact={true}/>
@@ -1291,13 +1329,13 @@ export default function App() {
 
       {/* ── WISH LIST VIEW ── */}
       {mainView==="wishlist"&&(
-        <div style={{ position:"fixed", top:0, left:0, right:0, bottom:0, background:"radial-gradient(ellipse at 20% 0%,#160a10 0%,#080509 50%,#050308 100%)", overflowY:"auto", zIndex:50, paddingTop:120, paddingBottom:90 }}>
-        <div style={{ maxWidth:1080, margin:"0 auto", padding:"0 20px" }}>
-          <h2 style={{ fontFamily:"'DM Serif Display',Georgia,serif", fontSize:24, fontWeight:400, color:"#ede0d8", marginBottom:4, marginTop:0 }}>Wish List</h2>
-          <p style={{ fontSize:13, color:"rgba(237,220,216,0.46)", marginBottom:16, fontFamily:"'DM Sans',sans-serif" }}>Restaurants you want to try. Add them from the back of any card.</p>
+        <div style={{ position:"fixed", top:0, left:0, right:0, bottom:0, background:"radial-gradient(ellipse at 20% 0%,#160a10 0%,#080509 50%,#050308 100%)", overflowY:"auto", zIndex:50, paddingTop:120, paddingBottom:isDesktop?48:90 }}>
+        <div style={{ maxWidth:isDesktop?1320:1080, margin:"0 auto", padding:isDesktop?"0 32px":"0 20px" }}>
+          <h2 style={{ fontFamily:"'DM Serif Display',Georgia,serif", fontSize:isDesktop?28:24, fontWeight:400, color:"#ede0d8", marginBottom:4, marginTop:0 }}>Wish List</h2>
+          <p style={{ fontSize:13, color:"rgba(237,220,216,0.46)", marginBottom:isDesktop?24:16, fontFamily:"'DM Sans',sans-serif" }}>Restaurants you want to try. Add them from the back of any card.</p>
           {wishlistRestaurants.length===0
             ?<div style={{ textAlign:"center", padding:"60px 20px", color:"rgba(237,220,216,0.28)", fontSize:15, fontFamily:"'DM Sans',sans-serif" }}>Your wish list is empty. Flip any card and tap "Add to Wish List".</div>
-            :<div style={{ display:"flex", flexDirection:"column", gap:12 }}>
+            :<div style={{ display:"grid", gridTemplateColumns:isDesktop?"repeat(auto-fill, minmax(380px, 1fr))":"1fr", gap:isDesktop?18:12 }}>
               {wishlistRestaurants.map(r=>(
                 <div key={r.id}>
                   <RestaurantCard r={r} selected={null} onClick={()=>{}} wishlist={wishlist} toggleWishlist={toggleWishlist} notifs={store.notifs||[]} saveNotif={saveNotif} removeNotif={removeNotif} compact={true}/>
@@ -1309,13 +1347,13 @@ export default function App() {
         </div>
       )}
 
-      {/* ── SOURCES FOOTER — always visible above nav ── */}
-      <div style={{ position:"fixed", bottom:58, left:0, right:0, textAlign:"center", pointerEvents:"none", zIndex:199 }}>
+      {/* ── SOURCES FOOTER — always visible above nav (mobile only) ── */}
+      {!isDesktop&&<div style={{ position:"fixed", bottom:58, left:0, right:0, textAlign:"center", pointerEvents:"none", zIndex:199 }}>
         <span style={{ fontSize:8, fontWeight:500, letterSpacing:1.5, textTransform:"uppercase", color:"rgba(237,220,216,0.15)", fontFamily:"'DM Sans',sans-serif" }}>Sources: Eater NY · The Infatuation · Resy · AI-Powered Daily Updates</span>
-      </div>
+      </div>}
 
-      {/* ── BOTTOM NAV BAR ── */}
-      <div style={{
+      {/* ── BOTTOM NAV BAR (mobile only) ── */}
+      {!isDesktop&&<div style={{
         position:"fixed", bottom:0, left:0, right:0, zIndex:200,
         background:"rgba(6,4,8,0.97)", backdropFilter:"blur(16px)",
         borderTop:"1px solid rgba(237,220,216,0.1)",
@@ -1349,7 +1387,7 @@ export default function App() {
             {badge>0&&<span style={{ position:"absolute", top:0, right:10, background:"rgba(180,80,90,0.9)", color:"#fff", fontSize:9, fontWeight:700, borderRadius:"50%", width:14, height:14, display:"flex", alignItems:"center", justifyContent:"center", fontFamily:"'DM Sans',sans-serif" }}>{badge}</span>}
           </button>
         ))}
-      </div>
+      </div>}
 
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Playfair+Display+SC:ital,wght@0,700;1,700&family=Playfair+Display:wght@700;800;900&family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@400;500;600;700&display=swap');
@@ -1362,6 +1400,10 @@ export default function App() {
         select:focus { border-color:rgba(237,220,216,0.28)!important; outline:none; }
         a:hover { opacity:0.82; } button:hover { opacity:0.88; }
         @media(max-width:640px){ div[style*="grid-template-columns: minmax(260px"]{grid-template-columns:1fr!important;} }
+        @media(min-width:768px){
+          button:hover { opacity:0.92; transform:translateY(-1px); }
+          a:hover { opacity:0.88; }
+        }
       `}</style>
     </div>
   );
