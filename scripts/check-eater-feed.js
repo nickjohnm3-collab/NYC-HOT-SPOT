@@ -6,6 +6,7 @@ const fs = require("fs");
 const FEEDS = [
   { name: "Eater NY", url: "https://ny.eater.com/rss/index.xml", format: "atom" },
   { name: "Grub Street", url: "https://feeds.feedburner.com/nymag/grubstreet", format: "rss" },
+  { name: "Resy (New on Resy)", url: "https://blog.resy.com/category/new-on-resy/feed/", format: "rss" },
 ];
 
 // Keywords that signal a restaurant opening article
@@ -140,7 +141,7 @@ async function main() {
   }
 
   body += "\n**Action needed:** Review these articles and add any noteworthy restaurants to `src/App.jsx`.\n";
-  body += "\n*Sources monitored: Eater NY, Grub Street (NY Mag). Time Out NY has no RSS feed.*\n";
+  body += "\n*Sources monitored: Eater NY, Grub Street (NY Mag), Resy (New on Resy). Time Out NY has no RSS feed.*\n";
 
   // Write issue body to file for the GitHub Action to use
   fs.writeFileSync("/tmp/issue-body.md", body);
