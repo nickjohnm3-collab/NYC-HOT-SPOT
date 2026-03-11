@@ -2162,5 +2162,399 @@
     ],
     "slug": "giardino-at-giulietta",
     "lastVerified": "2026-03-11"
+  },
+  {
+    "id": 65,
+    "name": "Nonna Dora's Tribeca",
+    "neighborhood": "Tribeca",
+    "cuisine": "Italian",
+    "price": 3,
+    "difficulty": 3,
+    "opened": "2025",
+    "status": "open",
+    "address": "173 Duane St",
+    "vibe": "Grandma's Kitchen & Soul",
+    "isBar": false,
+    "reservation": "Booking 1 week out",
+    "dressCode": "Smart Casual",
+    "mealPeriods": [
+      "Lunch",
+      "Dinner"
+    ],
+    "homepage": "https://www.nonnadorasnyc.com",
+    "chef": "About 20 kinds of pasta per day are lovingly handmade by the real Nonna Dora — octogenarian Addolorata Marzovilla. A women-operated Tribeca trattoria where every dish feels like it was made by your Italian grandmother. One of the most heartwarming dining experiences in the city.",
+    "bookingLinks": [
+      {
+        "name": "Resy",
+        "url": "https://resy.com/cities/new-york-ny/venues/nonna-doras-tribeca"
+      },
+      {
+        "name": "Google",
+        "url": "https://www.google.com/search?q=Nonna+Dora%27s+Tribeca+NYC+reservation"
+      }
+    ],
+    "slug": "nonna-dora-s-tribeca",
+    "lastVerified": "2026-03-11"
+  },
+  {
+    "id": 66,
+    "name": "Hakata Tonton",
+    "neighborhood": "Lower Manhattan",
+    "cuisine": "Japanese Hot Pot",
+    "price": 2,
+    "difficulty": 3,
+    "opened": "2026",
+    "status": "open",
+    "address": "Chinatown",
+    "vibe": "Cult Comeback",
+    "isBar": false,
+    "reservation": "Booking 1 week out",
+    "dressCode": "Casual",
+    "mealPeriods": [
+      "Dinner"
+    ],
+    "homepage": "https://www.google.com/search?q=Hakata+Tonton+NYC",
+    "chef": "You truly can't keep one of the city's favorite spots for pork-centric hot pot down. Now in its third iteration, Hakata Tonton has been beloved for its unique and supremely comforting homestyle Japanese cooking. A cult comeback in Chinatown.",
+    "bookingLinks": [
+      {
+        "name": "Resy",
+        "url": "https://resy.com/cities/new-york-ny/venues/hakata-tonton"
+      },
+      {
+        "name": "Google",
+        "url": "https://www.google.com/search?q=Hakata+Tonton+NYC+reservation"
+      }
+    ],
+    "slug": "hakata-tonton",
+    "lastVerified": "2026-03-11"
+  },
+  {
+    "id": 67,
+    "name": "Beast & Butterflies Downtown",
+    "neighborhood": "Lower Manhattan",
+    "cuisine": "Spanish Tapas",
+    "price": 2,
+    "difficulty": 2,
+    "opened": "2026",
+    "status": "open",
+    "address": "FiDi (M Social Hotel)",
+    "vibe": "Elegant & Scenic",
+    "isBar": true,
+    "reservation": "Walk-in Friendly",
+    "dressCode": "Smart Casual",
+    "mealPeriods": [
+      "Dinner",
+      "Late Night"
+    ],
+    "homepage": "https://www.google.com/search?q=Beast+Butterflies+Downtown+NYC",
+    "chef": "An elegant restaurant and bar inside the FiDi M Social Hotel. Spanish-inspired tapas, cocktails, and lovely views of the World Trade Center next door. The downtown outpost of a hotel restaurant group.",
+    "bookingLinks": [
+      {
+        "name": "Resy",
+        "url": "https://resy.com/cities/new-york-ny/venues/Beast-and-Butterflies"
+      },
+      {
+        "name": "Google",
+        "url": "https://www.google.com/search?q=Beast+Butterflies+FiDi+NYC"
+      }
+    ],
+    "slug": "beast-butterflies-downtown",
+    "lastVerified": "2026-03-11"
+  },
+  {
+    "id": 68,
+    "name": "Lei",
+    "neighborhood": "Lower Manhattan",
+    "cuisine": "Chinese Wine Bar",
+    "price": 2,
+    "difficulty": 3,
+    "opened": "2025",
+    "status": "open",
+    "address": "Chinatown",
+    "vibe": "Cool & Eclectic",
+    "isBar": true,
+    "reservation": "Walk-in Friendly",
+    "dressCode": "Casual",
+    "mealPeriods": [
+      "Dinner",
+      "Late Night"
+    ],
+    "homepage": "https://www.google.com/search?q=Lei+wine+bar+Chinatown+NYC",
+    "chef": "From one of the owners of King and Jupiter — two of SoHo's most beloved restaurants. Lei brings a fresh take on the wine bar, pairing an eclectic, globally sourced selection of wines with traditional Chinese flavors. Critically acclaimed and women-operated.",
+    "bookingLinks": [
+      {
+        "name": "Resy",
+        "url": "https://resy.com/cities/new-york-ny/venues/lei"
+      },
+      {
+        "name": "Google",
+        "url": "https://www.google.com/search?q=Lei+Chinatown+NYC+wine+bar"
+      }
+    ],
+    "slug": "lei",
+    "lastVerified": "2026-03-11"
+  },
+  {
+    "id": 69,
+    "name": "Quick Eternity",
+    "neighborhood": "Lower Manhattan",
+    "cuisine": "Cocktail Bar",
+    "price": 2,
+    "difficulty": 2,
+    "opened": "2025",
+    "status": "open",
+    "address": "Seaport",
+    "vibe": "Literary & Atmospheric",
+    "isBar": true,
+    "reservation": "Booking on Resy",
+    "dressCode": "Casual",
+    "mealPeriods": [
+      "Dinner",
+      "Late Night"
+    ],
+    "homepage": "https://www.google.com/search?q=Quick+Eternity+bar+NYC+Seaport",
+    "chef": "Step inside Melville's Moby Dick at this bar inspired by the novel's whaling tavern. Stiff cocktails, a satisfying Manhattan chowder, and an indulgent Jamaican rum caramel sticky toffee pudding. All reservations are for 'The Gam' — a communal experience.",
+    "bookingLinks": [
+      {
+        "name": "Resy",
+        "url": "https://resy.com/cities/new-york-ny/venues/quick-eternity"
+      },
+      {
+        "name": "Google",
+        "url": "https://www.google.com/search?q=Quick+Eternity+NYC+Seaport+bar"
+      }
+    ],
+    "slug": "quick-eternity",
+    "lastVerified": "2026-03-11"
+  },
+  {
+    "id": 70,
+    "name": "Teakwood Thai Chophouse",
+    "neighborhood": "Tribeca",
+    "cuisine": "Thai Fusion",
+    "price": 2,
+    "difficulty": 2,
+    "opened": "2025",
+    "status": "open",
+    "address": "Tribeca",
+    "vibe": "Inventive & Hearty",
+    "isBar": false,
+    "reservation": "Walk-in Friendly",
+    "dressCode": "Casual",
+    "mealPeriods": [
+      "Lunch",
+      "Dinner"
+    ],
+    "homepage": "https://www.google.com/search?q=Teakwood+Thai+Chophouse+Tribeca+NYC",
+    "chef": "Thai classics meet chophouse standards with a twist. Pad Thai and kaprow alongside pork chops roasted with cashews and pineapple tomato chutney. Baguette garlic bread with cilantro adds a playful edge. A unique fusion concept in Tribeca.",
+    "bookingLinks": [
+      {
+        "name": "Resy",
+        "url": "https://resy.com/cities/new-york-ny/venues/teakwood-thai-chop-house"
+      },
+      {
+        "name": "Google",
+        "url": "https://www.google.com/search?q=Teakwood+Thai+Chophouse+NYC+reservation"
+      }
+    ],
+    "slug": "teakwood-thai-chophouse",
+    "lastVerified": "2026-03-11"
+  },
+  {
+    "id": 71,
+    "name": "BINONDO",
+    "neighborhood": "Lower Manhattan",
+    "cuisine": "Filipino",
+    "price": 1,
+    "difficulty": 1,
+    "opened": "2025",
+    "status": "open",
+    "address": "Chinatown",
+    "vibe": "Warm & Authentic",
+    "isBar": false,
+    "reservation": "Walk-in Friendly",
+    "dressCode": "Casual",
+    "mealPeriods": [
+      "Lunch",
+      "Dinner"
+    ],
+    "homepage": "https://www.google.com/search?q=Binondo+Filipino+Chinatown+NYC",
+    "chef": "Named for the Chinatown district of Manila, Binondo serves Filipino Chinese classics in a warm and inviting space. Don't skip the pork sisig or okoy, a shrimp fritter specialty. One of the few Filipino restaurants in lower Manhattan.",
+    "bookingLinks": [
+      {
+        "name": "Resy",
+        "url": "https://resy.com/cities/new-york-ny/venues/binondo"
+      },
+      {
+        "name": "Google",
+        "url": "https://www.google.com/search?q=Binondo+NYC+Filipino+restaurant"
+      }
+    ],
+    "slug": "binondo",
+    "lastVerified": "2026-03-11"
+  },
+  {
+    "id": 72,
+    "name": "Farzi NYC",
+    "neighborhood": "Tribeca",
+    "cuisine": "Modern Indian",
+    "price": 2,
+    "difficulty": 2,
+    "opened": "2025",
+    "status": "open",
+    "address": "Tribeca",
+    "vibe": "Global & Inventive",
+    "isBar": false,
+    "reservation": "Walk-in Friendly",
+    "dressCode": "Smart Casual",
+    "mealPeriods": [
+      "Dinner"
+    ],
+    "homepage": "https://www.google.com/search?q=Farzi+NYC+Tribeca+Indian+restaurant",
+    "chef": "The first New York outpost of a global restaurant group known for its innovative takes on Indian cuisine. NYC-exclusive dishes include goat cheese chicken tikka and keema pie. Modern Indian in a stylish Tribeca setting.",
+    "bookingLinks": [
+      {
+        "name": "Resy",
+        "url": "https://resy.com/cities/new-york-ny/venues/farzi-newyork"
+      },
+      {
+        "name": "Google",
+        "url": "https://www.google.com/search?q=Farzi+NYC+reservation"
+      }
+    ],
+    "slug": "farzi-nyc",
+    "lastVerified": "2026-03-11"
+  },
+  {
+    "id": 73,
+    "name": "Wok In Duane",
+    "neighborhood": "Tribeca",
+    "cuisine": "Asian",
+    "price": 2,
+    "difficulty": 1,
+    "opened": "2025",
+    "status": "open",
+    "address": "Tribeca",
+    "vibe": "Cozy & Casual",
+    "isBar": false,
+    "reservation": "Walk-in Friendly",
+    "dressCode": "Casual",
+    "mealPeriods": [
+      "Lunch",
+      "Dinner"
+    ],
+    "homepage": "https://www.google.com/search?q=Wok+In+Duane+NYC",
+    "chef": "Women-operated spot serving shumai, black pepper beef, and a standout scallop-shrimp-chicken sausage fried rice. Cozy, warm-lit space perfect for a casual night out. The kind of neighborhood gem you want to keep to yourself.",
+    "bookingLinks": [
+      {
+        "name": "Resy",
+        "url": "https://resy.com/cities/new-york-ny/venues/wok-in-duane"
+      },
+      {
+        "name": "Google",
+        "url": "https://www.google.com/search?q=Wok+In+Duane+NYC+restaurant"
+      }
+    ],
+    "slug": "wok-in-duane",
+    "lastVerified": "2026-03-11"
+  },
+  {
+    "id": 74,
+    "name": "The Foyer at NY Vintners",
+    "neighborhood": "Tribeca",
+    "cuisine": "Wine Bar",
+    "price": 1,
+    "difficulty": 1,
+    "opened": "2026",
+    "status": "open",
+    "address": "Tribeca",
+    "vibe": "Exclusive & Accessible",
+    "isBar": true,
+    "reservation": "Walk-in Friendly",
+    "dressCode": "Casual",
+    "mealPeriods": [
+      "Evening",
+      "Late Night"
+    ],
+    "homepage": "https://www.google.com/search?q=The+Foyer+NY+Vintners+Tribeca",
+    "chef": "The next best thing to being a member of the exclusive NY Vintners club — but open to the public. An ideal place to enjoy a glass of whatever your server recommends from their vast and excellent cellar. Brand new on Resy in Tribeca.",
+    "bookingLinks": [
+      {
+        "name": "Resy",
+        "url": "https://resy.com/cities/new-york-ny/venues/the-foyer-at-ny-vintners"
+      },
+      {
+        "name": "Google",
+        "url": "https://www.google.com/search?q=Foyer+NY+Vintners+Tribeca"
+      }
+    ],
+    "slug": "the-foyer-at-ny-vintners",
+    "lastVerified": "2026-03-11"
+  },
+  {
+    "id": 75,
+    "name": "NORIMEN",
+    "neighborhood": "Midtown",
+    "cuisine": "Korean",
+    "price": 1,
+    "difficulty": 1,
+    "opened": "2026",
+    "status": "open",
+    "address": "Midtown",
+    "vibe": "Fresh & Quick",
+    "isBar": false,
+    "reservation": "Walk-in Friendly",
+    "dressCode": "Casual",
+    "mealPeriods": [
+      "Lunch",
+      "Dinner"
+    ],
+    "homepage": "https://www.google.com/search?q=NORIMEN+NYC+Korean",
+    "chef": "A brand new Korean spot in Manhattan, freshly listed on Resy with a perfect 5.0 rating. Details still emerging — an early discovery for those who like being first.",
+    "bookingLinks": [
+      {
+        "name": "Resy",
+        "url": "https://resy.com/cities/new-york-ny/venues/norimen"
+      },
+      {
+        "name": "Google",
+        "url": "https://www.google.com/search?q=NORIMEN+NYC+Korean+restaurant"
+      }
+    ],
+    "slug": "norimen",
+    "lastVerified": "2026-03-11"
+  },
+  {
+    "id": 76,
+    "name": "Conwell Hall",
+    "neighborhood": "Lower Manhattan",
+    "cuisine": "Cocktail Bar",
+    "price": 2,
+    "difficulty": 2,
+    "opened": "2025",
+    "status": "open",
+    "address": "Financial District",
+    "vibe": "Art Deco & Swanky",
+    "isBar": true,
+    "reservation": "Walk-in Friendly",
+    "dressCode": "Smart Casual",
+    "mealPeriods": [
+      "Evening",
+      "Late Night"
+    ],
+    "homepage": "https://www.google.com/search?q=Conwell+Hall+NYC+FiDi+bar",
+    "chef": "A swanky cocktail bar tucked inside a former bank built in the 1920s. Art Deco interiors create the perfect backdrop for a Sazerac and an order of crab artichoke dip. One of FiDi's most atmospheric new arrivals.",
+    "bookingLinks": [
+      {
+        "name": "Resy",
+        "url": "https://resy.com/cities/new-york-ny/venues/conwell-hall"
+      },
+      {
+        "name": "Google",
+        "url": "https://www.google.com/search?q=Conwell+Hall+NYC+cocktail+bar"
+      }
+    ],
+    "slug": "conwell-hall",
+    "lastVerified": "2026-03-11"
   }
 ]

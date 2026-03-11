@@ -695,6 +695,19 @@ const RESTAURANT_COORDS = {
   62:[40.7590,-73.9790],  // Hi Dozo - Near Rockefeller Center
   63:[40.6890,-73.9960],  // Lou & Bev's - Brooklyn Heights
   64:[40.7527,-73.9772],  // Giardino at Giulietta - MetLife
+  // Resy New on Resy batch
+  65:[40.7173,-74.0083],  // Nonna Dora's Tribeca
+  66:[40.7155,-73.9980],  // Hakata Tonton - Chinatown
+  67:[40.7105,-74.0105],  // Beast & Butterflies Downtown - FiDi
+  68:[40.7148,-73.9975],  // Lei - Chinatown
+  69:[40.7065,-74.0030],  // Quick Eternity - Seaport
+  70:[40.7170,-74.0080],  // Teakwood Thai Chophouse - Tribeca
+  71:[40.7145,-73.9985],  // BINONDO - Chinatown
+  72:[40.7175,-74.0070],  // Farzi NYC - Tribeca
+  73:[40.7165,-74.0075],  // Wok In Duane - Tribeca
+  74:[40.7180,-74.0060],  // The Foyer at NY Vintners - Tribeca
+  75:[40.7540,-73.9850],  // NORIMEN - Midtown
+  76:[40.7075,-74.0095],  // Conwell Hall - FiDi
 };
 
 function getRestaurantCoords(r) {
