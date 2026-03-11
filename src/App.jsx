@@ -1000,7 +1000,7 @@ function RestaurantCard({ r, selected, onClick, wishlist, toggleWishlist, notifs
                 <span>{wishlist.includes(r.id)?"★":"☆"}</span>
                 {wishlist.includes(r.id)?"On Your Wish List":"Add to Wish List"}
               </button>
-              {notifs.includes(r.id)?(
+              {r.status==="coming_soon"&&(notifs.includes(r.id)?(
                 <button onClick={e=>{e.stopPropagation();removeNotif(r.id);}} style={{
                   display:"flex", alignItems:"center", gap:7,
                   background:"rgba(180,80,90,0.15)",
@@ -1024,7 +1024,7 @@ function RestaurantCard({ r, selected, onClick, wishlist, toggleWishlist, notifs
                 }}>
                   <span>🔔</span>Add to Reminders
                 </button>
-              )}
+              ))}
             </div>
           </div>
         </div>
