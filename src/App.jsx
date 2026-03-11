@@ -1084,6 +1084,37 @@ export default function App() {
   const [mainView,     setMainView]     = useState("home");
   const wishlist = store.wishlist || [];
 
+  // ── Install / Add to Home Screen prompt ──
+  const [installPrompt, setInstallPrompt] = useState(null);
+  const [showInstallBanner, setShowInstallBanner] = useState(false);
+  const isStandalone = typeof window !== "undefined" && (window.matchMedia("(display-mode: standalone)").matches || window.navigator.standalone);
+
+  useEffect(() => {
+    // Android/Chrome: capture the native install prompt
+    const handler = (e) => { e.preventDefault(); setInstallPrompt(e); setShowInstallBanner(true); };
+    window.addEventListener("beforeinstallprompt", handler);
+
+    // iOS Safari: detect and show manual instructions
+    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.userAgent.includes("Mac") && "ontouchend" in document);
+    const isSafari = /Safari/.test(navigator.userAgent) && !/CriOS|FxiOS|Chrome/.test(navigator.userAgent);
+    if (isIOS && isSafari && !isStandalone) {
+      setShowInstallBanner(true);
+    }
+
+    return () => window.removeEventListener("beforeinstallprompt", handler);
+  }, []);
+
+  const handleInstallClick = async () => {
+    if (installPrompt) {
+      // Android/Chrome native prompt
+      installPrompt.prompt();
+      await installPrompt.userChoice;
+      setInstallPrompt(null);
+      setShowInstallBanner(false);
+    }
+    // iOS: the banner itself has instructions, dismiss just hides it
+  };
+
   const lastUpdated = new Date().toLocaleDateString("en-US",{month:"long",day:"numeric",year:"numeric"});
   const recentCount = RESTAURANTS_DEDUPED.filter(r=>isWithin6Months(r)).length;
   const soonCnt     = RESTAURANTS_DEDUPED.filter(r=>r.status==="coming_soon").length;
@@ -1191,6 +1222,45 @@ export default function App() {
           </div>
         </div>
       </div>}
+
+      {/* ── ADD TO HOME SCREEN BANNER ── */}
+      {showInstallBanner&&!isStandalone&&mainView==="home"&&(
+        <div style={{ maxWidth:isDesktop?1320:1080, margin:"0 auto", padding:"0 20px" }}>
+          <div style={{
+            display:"flex", alignItems:"center", justifyContent:"space-between", gap:12,
+            background:"linear-gradient(135deg,rgba(154,116,32,0.15),rgba(100,75,20,0.2))",
+            border:"1px solid rgba(154,116,32,0.35)",
+            borderRadius:14, padding:"12px 18px", marginBottom:16,
+          }}>
+            <div style={{ flex:1 }}>
+              <div style={{ fontSize:13, fontWeight:600, color:"rgba(212,176,80,0.95)", fontFamily:"'DM Sans',sans-serif", marginBottom:2 }}>
+                {installPrompt ? "Install NYC Hot Spot" : "Add to Home Screen"}
+              </div>
+              <div style={{ fontSize:11, color:"rgba(237,220,216,0.5)", fontFamily:"'DM Sans',sans-serif", lineHeight:1.4 }}>
+                {installPrompt
+                  ? "Get the full app experience — quick access from your home screen"
+                  : <>Tap <span style={{ display:"inline-flex", verticalAlign:"middle", background:"rgba(237,220,216,0.12)", borderRadius:4, padding:"1px 5px", fontSize:13 }}>⎙</span> then <b>"Add to Home Screen"</b></>
+                }
+              </div>
+            </div>
+            <div style={{ display:"flex", gap:8, flexShrink:0 }}>
+              {installPrompt&&(
+                <button onClick={handleInstallClick} style={{
+                  background:"linear-gradient(135deg,rgba(154,116,32,0.5),rgba(120,90,25,0.65))",
+                  border:"1px solid rgba(212,176,80,0.5)",
+                  borderRadius:20, padding:"7px 18px",
+                  fontSize:12, fontWeight:600, fontFamily:"'DM Sans',sans-serif",
+                  color:"rgba(237,220,216,0.95)", cursor:"pointer",
+                }}>Install</button>
+              )}
+              <button onClick={()=>setShowInstallBanner(false)} style={{
+                background:"none", border:"none",
+                color:"rgba(237,220,216,0.3)", fontSize:18, cursor:"pointer", padding:"0 4px", lineHeight:1,
+              }}>×</button>
+            </div>
+          </div>
+        </div>
+      )}
 
       <div style={{ maxWidth:isDesktop?1320:1080, margin:"0 auto", padding:isDesktop?"0 32px 48px":"0 20px 90px" }}>
 
