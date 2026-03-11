@@ -1,0 +1,111 @@
+name: "🍽️ Add Restaurant"
+description: "Submit a new restaurant to be added to NYC Hot Spot"
+title: "[Restaurant] "
+labels: ["add-restaurant"]
+body:
+  - type: input
+    id: name
+    attributes:
+      label: Restaurant Name
+      placeholder: e.g. Babbo
+    validations:
+      required: true
+  - type: dropdown
+    id: status
+    attributes:
+      label: Status
+      options:
+        - open
+        - coming_soon
+    validations:
+      required: true
+  - type: input
+    id: neighborhood
+    attributes:
+      label: Neighborhood
+      placeholder: e.g. West Village, SoHo, Midtown
+    validations:
+      required: true
+  - type: input
+    id: cuisine
+    attributes:
+      label: Cuisine
+      placeholder: e.g. Italian, Japanese Omakase, Cocktail Bar
+    validations:
+      required: true
+  - type: dropdown
+    id: price
+    attributes:
+      label: Price Level
+      options:
+        - "1 - Under $30"
+        - "2 - $30-60"
+        - "3 - $60-100"
+        - "4 - $100+"
+    validations:
+      required: true
+  - type: input
+    id: address
+    attributes:
+      label: Address
+      placeholder: e.g. 110 Waverly Pl
+    validations:
+      required: true
+  - type: input
+    id: opened
+    attributes:
+      label: Opened Date (or expected)
+      placeholder: e.g. Feb 10, 2026 or Spring 2026
+    validations:
+      required: true
+  - type: input
+    id: vibe
+    attributes:
+      label: Vibe
+      placeholder: e.g. Intimate & Iconic, Casual & Soulful
+    validations:
+      required: true
+  - type: dropdown
+    id: isBar
+    attributes:
+      label: Is this primarily a bar?
+      options:
+        - "No"
+        - "Yes"
+  - type: input
+    id: reservation
+    attributes:
+      label: Reservation Info
+      placeholder: e.g. Booking 2 weeks out, Walk-in Friendly
+  - type: input
+    id: dressCode
+    attributes:
+      label: Dress Code
+      placeholder: e.g. Smart Casual, Casual
+  - type: input
+    id: mealPeriods
+    attributes:
+      label: "Meal Periods (comma-separated)"
+      placeholder: e.g. Lunch, Dinner, Late Night
+  - type: input
+    id: homepage
+    attributes:
+      label: Website URL
+      placeholder: e.g. https://www.restaurant.com
+  - type: textarea
+    id: chef
+    attributes:
+      label: Chef / Description
+      placeholder: Brief description of chef, concept, and what makes it notable
+    validations:
+      required: true
+  - type: input
+    id: resyUrl
+    attributes:
+      label: Resy URL (optional)
+      placeholder: e.g. https://resy.com/cities/new-york-ny/venues/...
+  - type: input
+    id: openingMonth
+    attributes:
+      label: "Opening Month (coming soon only)"
+      placeholder: e.g. Spring 2026, April 2026

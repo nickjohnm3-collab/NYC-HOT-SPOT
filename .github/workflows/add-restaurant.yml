@@ -1,0 +1,42 @@
+name: Auto-Add Restaurant from Issue
+
+on:
+  issues:
+    types: [labeled]
+
+permissions:
+  contents: write
+  issues: write
+
+jobs:
+  add-restaurant:
+    if: github.event.label.name == 'add-restaurant'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Parse issue and add restaurant
+        env:
+          ISSUE_BODY: ${{ github.event.issue.body }}
+        run: node scripts/add-restaurant-from-issue.js
+
+      - name: Commit and push
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add src/restaurants.json
+          git diff --staged --quiet || (git commit -m "Add restaurant: ${{ github.event.issue.title }} [auto]" && git push)
+
+      - name: Close issue with comment
+        uses: peter-evans/close-issue@v3
+        with:
+          comment: |
+            ✅ Restaurant added automatically!
+
+            The restaurant has been added to `src/restaurants.json` and will appear on the site after the next deploy.
+
+            [View the updated site](https://nickjohnm3-collab.github.io/NYC-HOT-SPOT)
