@@ -90,6 +90,8 @@ function main() {
     homepage: parsed["Website URL"] || `https://www.google.com/search?q=${encodeURIComponent(name + " NYC")}`,
     chef: chef || "",
     bookingLinks,
+    slug: name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, ""),
+    lastVerified: new Date().toISOString().split("T")[0],
   };
 
   // Add openedDate for open restaurants

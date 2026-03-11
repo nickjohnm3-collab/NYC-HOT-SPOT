@@ -32,7 +32,9 @@
         "name": "Google",
         "url": "https://www.google.com/search?q=Seventy+Seven+Alley+NYC+reservation"
       }
-    ]
+    ],
+    "slug": "seventy-seven-alley",
+    "lastVerified": "2026-03-11"
   },
   {
     "id": 4,
@@ -64,7 +66,9 @@
         "name": "Google",
         "url": "https://www.google.com/search?q=Kjun+NYC+reservation"
       }
-    ]
+    ],
+    "slug": "kjun",
+    "lastVerified": "2026-03-11"
   },
   {
     "id": 3,
@@ -99,7 +103,9 @@
         "name": "Google",
         "url": "https://www.google.com/search?q=Kidilum+NYC+reservation"
       }
-    ]
+    ],
+    "slug": "kidilum",
+    "lastVerified": "2026-03-11"
   },
   {
     "id": 12,
@@ -131,7 +137,9 @@
         "name": "Google",
         "url": "https://www.google.com/search?q=Kees+bar+NYC"
       }
-    ]
+    ],
+    "slug": "kees",
+    "lastVerified": "2026-03-11"
   },
   {
     "id": 2,
@@ -163,7 +171,9 @@
         "name": "Google",
         "url": "https://www.google.com/search?q=Ambassadors+Clubhouse+NYC+reservation"
       }
-    ]
+    ],
+    "slug": "ambassadors-clubhouse",
+    "lastVerified": "2026-03-11"
   },
   {
     "id": 13,
@@ -199,7 +209,9 @@
         "name": "Google",
         "url": "https://www.google.com/search?q=Cleo+Downtown+NYC+reservation"
       }
-    ]
+    ],
+    "slug": "cleo-downtown",
+    "lastVerified": "2026-03-11"
   },
   {
     "id": 7,
@@ -230,7 +242,9 @@
         "name": "Google",
         "url": "https://www.google.com/search?q=Odo+East+Village+reservation"
       }
-    ]
+    ],
+    "slug": "odo-east-village",
+    "lastVerified": "2026-03-11"
   },
   {
     "id": 5,
@@ -258,7 +272,9 @@
         "name": "Walk-ins Only",
         "url": "https://www.google.com/search?q=Beto%27s+Carnitas+NYC"
       }
-    ]
+    ],
+    "slug": "beto-s-carnitas",
+    "lastVerified": "2026-03-11"
   },
   {
     "id": 11,
@@ -289,7 +305,9 @@
         "name": "Google",
         "url": "https://www.google.com/search?q=Umeko+NYC+reservation"
       }
-    ]
+    ],
+    "slug": "umeko",
+    "lastVerified": "2026-03-11"
   },
   {
     "id": 14,
@@ -323,7 +341,9 @@
         "name": "Walk-ins",
         "url": "https://www.google.com/search?q=Aperitivo+CARTA+NYC"
       }
-    ]
+    ],
+    "slug": "aperitivo-by-carta",
+    "lastVerified": "2026-03-11"
   },
   {
     "id": 9,
@@ -355,7 +375,9 @@
         "name": "Walk-ins",
         "url": "https://www.google.com/search?q=Pizza+Studio+Tamaki+NYC"
       }
-    ]
+    ],
+    "slug": "pizza-studio-tamaki",
+    "lastVerified": "2026-03-11"
   },
   {
     "id": 15,
@@ -387,7 +409,9 @@
         "name": "Walk-ins",
         "url": "https://www.google.com/search?q=Seiren+NYC+bar"
       }
-    ]
+    ],
+    "slug": "seir-n",
+    "lastVerified": "2026-03-11"
   },
   {
     "id": 8,
@@ -415,7 +439,9 @@
         "name": "Walk-ins Only",
         "url": "https://www.google.com/search?q=Much+Obliged+NYC+bar"
       }
-    ]
+    ],
+    "slug": "much-obliged",
+    "lastVerified": "2026-03-11"
   },
   {
     "id": 1,
@@ -450,7 +476,9 @@
         "name": "Google",
         "url": "https://www.google.com/search?q=Golden+Steer+NYC+reservation"
       }
-    ]
+    ],
+    "slug": "golden-steer",
+    "lastVerified": "2026-03-11"
   },
   {
     "id": 16,
@@ -478,7 +506,9 @@
         "name": "Walk-ins Only",
         "url": "https://www.google.com/search?q=Tacos+La+36+NYC"
       }
-    ]
+    ],
+    "slug": "tacos-la-36",
+    "lastVerified": "2026-03-11"
   },
   {
     "id": 10,
@@ -509,7 +539,9 @@
         "name": "Google",
         "url": "https://www.google.com/search?q=Rulin+NYC+reservation"
       }
-    ]
+    ],
+    "slug": "rulin",
+    "lastVerified": "2026-03-11"
   },
   {
     "id": 6,
@@ -540,7 +572,9 @@
         "name": "Google",
         "url": "https://www.google.com/search?q=Bistrot+Ha+NYC+reservation"
       }
-    ]
+    ],
+    "slug": "bistrot-ha",
+    "lastVerified": "2026-03-11"
   },
   {
     "id": 24,
@@ -575,7 +609,9 @@
         "name": "Google",
         "url": "https://www.google.com/search?q=Babbo+NYC+reservation"
       }
-    ]
+    ],
+    "slug": "babbo",
+    "lastVerified": "2026-03-11"
   },
   {
     "id": 25,
@@ -607,7 +643,9 @@
         "name": "Walk-ins",
         "url": "https://www.google.com/search?q=Wild+Cherry+NYC"
       }
-    ]
+    ],
+    "slug": "wild-cherry",
+    "lastVerified": "2026-03-11"
   },
   {
     "id": 26,
@@ -636,7 +674,9 @@
         "name": "Walk-ins Only",
         "url": "https://www.google.com/search?q=Meadow+Lane+NYC"
       }
-    ]
+    ],
+    "slug": "meadow-lane",
+    "lastVerified": "2026-03-11"
   },
   {
     "id": 27,
@@ -665,7 +705,9 @@
         "name": "Walk-ins Only",
         "url": "https://www.google.com/search?q=Salumeria+Rosi+East+Village+NYC"
       }
-    ]
+    ],
+    "slug": "salumeria-rosi-east-village",
+    "lastVerified": "2026-03-11"
   },
   {
     "id": 28,
@@ -697,7 +739,9 @@
         "name": "Google",
         "url": "https://www.google.com/search?q=Kaia+Wine+Bar+NYC+reservation"
       }
-    ]
+    ],
+    "slug": "kaia-wine-bar",
+    "lastVerified": "2026-03-11"
   },
   {
     "id": 29,
@@ -729,7 +773,9 @@
         "name": "Google",
         "url": "https://www.google.com/search?q=Double+Knot+NYC+reservation"
       }
-    ]
+    ],
+    "slug": "double-knot",
+    "lastVerified": "2026-03-11"
   },
   {
     "id": 30,
@@ -761,7 +807,9 @@
         "name": "Google",
         "url": "https://www.google.com/search?q=Seahorse+NYC+reservation"
       }
-    ]
+    ],
+    "slug": "seahorse",
+    "lastVerified": "2026-03-11"
   },
   {
     "id": 31,
@@ -792,7 +840,9 @@
         "name": "Google",
         "url": "https://www.google.com/search?q=Hwaro+NYC+reservation"
       }
-    ]
+    ],
+    "slug": "hwaro",
+    "lastVerified": "2026-03-11"
   },
   {
     "id": 32,
@@ -823,7 +873,9 @@
         "name": "Google",
         "url": "https://www.google.com/search?q=Or%27esh+NYC+reservation"
       }
-    ]
+    ],
+    "slug": "or-esh",
+    "lastVerified": "2026-03-11"
   },
   {
     "id": 33,
@@ -854,7 +906,9 @@
         "name": "Google",
         "url": "https://www.google.com/search?q=The+Eighty+Six+NYC+reservation"
       }
-    ]
+    ],
+    "slug": "the-eighty-six",
+    "lastVerified": "2026-03-11"
   },
   {
     "id": 34,
@@ -889,7 +943,9 @@
         "name": "Google",
         "url": "https://www.google.com/search?q=Adda+NYC+East+Village+reservation"
       }
-    ]
+    ],
+    "slug": "adda",
+    "lastVerified": "2026-03-11"
   },
   {
     "id": 35,
@@ -920,7 +976,9 @@
         "name": "Google",
         "url": "https://www.google.com/search?q=Kabawa+NYC+reservation"
       }
-    ]
+    ],
+    "slug": "kabawa",
+    "lastVerified": "2026-03-11"
   },
   {
     "id": 36,
@@ -951,7 +1009,9 @@
         "name": "Google",
         "url": "https://www.google.com/search?q=Cove+Flynn+McGarry+NYC+reservation"
       }
-    ]
+    ],
+    "slug": "cove",
+    "lastVerified": "2026-03-11"
   },
   {
     "id": 40,
@@ -982,7 +1042,9 @@
         "name": "Google",
         "url": "https://www.google.com/search?q=Saverne+NYC+Gabriel+Kreuther+reservation"
       }
-    ]
+    ],
+    "slug": "saverne",
+    "lastVerified": "2026-03-11"
   },
   {
     "id": 41,
@@ -1015,7 +1077,9 @@
         "name": "Google",
         "url": "https://www.google.com/search?q=Da+Toscano+NYC+reservation"
       }
-    ]
+    ],
+    "slug": "da-toscano",
+    "lastVerified": "2026-03-11"
   },
   {
     "id": 42,
@@ -1046,7 +1110,9 @@
         "name": "Google",
         "url": "https://www.google.com/search?q=Shin+Takumi+NYC+reservation"
       }
-    ]
+    ],
+    "slug": "shin-takumi",
+    "lastVerified": "2026-03-11"
   },
   {
     "id": 43,
@@ -1078,7 +1144,9 @@
         "name": "Google",
         "url": "https://www.google.com/search?q=Chubby+Tan+NYC+East+Village"
       }
-    ]
+    ],
+    "slug": "chubby-tan",
+    "lastVerified": "2026-03-11"
   },
   {
     "id": 44,
@@ -1110,7 +1178,9 @@
         "name": "Google",
         "url": "https://www.google.com/search?q=Bar+Lola+NYC+Hell%27s+Kitchen"
       }
-    ]
+    ],
+    "slug": "bar-lola",
+    "lastVerified": "2026-03-11"
   },
   {
     "id": 45,
@@ -1143,7 +1213,9 @@
         "name": "Google",
         "url": "https://www.google.com/search?q=Birdie%27s+frozen+yogurt+West+Village+NYC"
       }
-    ]
+    ],
+    "slug": "birdie-s",
+    "lastVerified": "2026-03-11"
   },
   {
     "id": 37,
@@ -1175,7 +1247,9 @@
         "name": "Google",
         "url": "https://www.google.com/search?q=Oriana+NYC+restaurant+reservation"
       }
-    ]
+    ],
+    "slug": "oriana",
+    "lastVerified": "2026-03-11"
   },
   {
     "id": 38,
@@ -1207,7 +1281,9 @@
         "name": "Google",
         "url": "https://www.google.com/search?q=Jeju+Noodle+Bar+Nolita+reservation"
       }
-    ]
+    ],
+    "slug": "jeju-noodle-bar-nolita",
+    "lastVerified": "2026-03-11"
   },
   {
     "id": 39,
@@ -1240,7 +1316,9 @@
         "name": "Google",
         "url": "https://www.google.com/search?q=Dean%27s+SoHo+NYC+reservation"
       }
-    ]
+    ],
+    "slug": "dean-s",
+    "lastVerified": "2026-03-11"
   },
   {
     "id": 46,
@@ -1269,7 +1347,9 @@
         "name": "Walk-ins",
         "url": "https://www.google.com/search?q=Good+Time+Country+Buffet+NYC"
       }
-    ]
+    ],
+    "slug": "good-time-country-buffet",
+    "lastVerified": "2026-03-11"
   },
   {
     "id": 18,
@@ -1302,7 +1382,9 @@
         "name": "Google",
         "url": "https://www.google.com/search?q=Straker%27s+NYC"
       }
-    ]
+    ],
+    "slug": "straker-s-nyc",
+    "lastVerified": "2026-03-11"
   },
   {
     "id": 19,
@@ -1336,7 +1418,9 @@
         "name": "Google",
         "url": "https://www.google.com/search?q=Dishoom+NYC"
       }
-    ]
+    ],
+    "slug": "dishoom",
+    "lastVerified": "2026-03-11"
   },
   {
     "id": 20,
@@ -1369,7 +1453,9 @@
         "name": "Google",
         "url": "https://www.google.com/search?q=Uovo+NYC"
       }
-    ]
+    ],
+    "slug": "uovo",
+    "lastVerified": "2026-03-11"
   },
   {
     "id": 21,
@@ -1401,7 +1487,9 @@
         "name": "Google",
         "url": "https://www.google.com/search?q=Oyatte+NYC+reservation"
       }
-    ]
+    ],
+    "slug": "oyatte",
+    "lastVerified": "2026-03-11"
   },
   {
     "id": 22,
@@ -1434,7 +1522,9 @@
         "name": "Google",
         "url": "https://www.google.com/search?q=Carver+48+NYC+reservation"
       }
-    ]
+    ],
+    "slug": "carver-48",
+    "lastVerified": "2026-03-11"
   },
   {
     "id": 23,
@@ -1463,7 +1553,9 @@
         "name": "Walk-ins",
         "url": "https://www.google.com/search?q=RYE+Martin+Auer+NYC"
       }
-    ]
+    ],
+    "slug": "rye-by-martin-auer",
+    "lastVerified": "2026-03-11"
   },
   {
     "id": 47,
@@ -1494,7 +1586,9 @@
         "name": "Google",
         "url": "https://www.google.com/search?q=Bufon+NYC+reservation"
       }
-    ]
+    ],
+    "slug": "buf-n",
+    "lastVerified": "2026-03-11"
   },
   {
     "id": 48,
@@ -1527,7 +1621,9 @@
         "name": "Google",
         "url": "https://www.google.com/search?q=Giulietta+NYC+MetLife+reservation"
       }
-    ]
+    ],
+    "slug": "giulietta",
+    "lastVerified": "2026-03-11"
   },
   {
     "id": 49,
@@ -1559,7 +1655,9 @@
         "name": "Google",
         "url": "https://www.google.com/search?q=Verde+Chelsea+NYC+reservation"
       }
-    ]
+    ],
+    "slug": "verde",
+    "lastVerified": "2026-03-11"
   },
   {
     "id": 50,
@@ -1590,7 +1688,9 @@
         "name": "Google",
         "url": "https://www.google.com/search?q=Anba+NYC+omakase+reservation"
       }
-    ]
+    ],
+    "slug": "anb",
+    "lastVerified": "2026-03-11"
   },
   {
     "id": 51,
@@ -1621,7 +1721,9 @@
         "name": "Google",
         "url": "https://www.google.com/search?q=Dahla+West+Village+NYC+reservation"
       }
-    ]
+    ],
+    "slug": "dahla",
+    "lastVerified": "2026-03-11"
   },
   {
     "id": 52,
@@ -1653,7 +1755,9 @@
         "name": "Google",
         "url": "https://www.google.com/search?q=Delos+NYC+Greek+restaurant+reservation"
       }
-    ]
+    ],
+    "slug": "delos",
+    "lastVerified": "2026-03-11"
   },
   {
     "id": 53,
@@ -1686,7 +1790,9 @@
         "name": "Google",
         "url": "https://www.google.com/search?q=Lily+Pond+West+Village+NYC"
       }
-    ]
+    ],
+    "slug": "lily-pond",
+    "lastVerified": "2026-03-11"
   },
   {
     "id": 54,
@@ -1717,7 +1823,9 @@
         "name": "Google",
         "url": "https://www.google.com/search?q=Nounou+NYC+noodle+bar"
       }
-    ]
+    ],
+    "slug": "nounou",
+    "lastVerified": "2026-03-11"
   },
   {
     "id": 55,
@@ -1749,7 +1857,9 @@
         "name": "Google",
         "url": "https://www.google.com/search?q=Piadi+La+Piadineria+NYC"
       }
-    ]
+    ],
+    "slug": "piadi-by-la-piadineria",
+    "lastVerified": "2026-03-11"
   },
   {
     "id": 56,
@@ -1781,7 +1891,9 @@
         "name": "Google",
         "url": "https://www.google.com/search?q=Bar+Maeda+NYC"
       }
-    ]
+    ],
+    "slug": "bar-maeda",
+    "lastVerified": "2026-03-11"
   },
   {
     "id": 57,
@@ -1812,7 +1924,9 @@
         "name": "Google",
         "url": "https://www.google.com/search?q=Co+Lac+NYC+reservation"
       }
-    ]
+    ],
+    "slug": "c-l-c",
+    "lastVerified": "2026-03-11"
   },
   {
     "id": 58,
@@ -1843,7 +1957,9 @@
         "name": "Google",
         "url": "https://www.google.com/search?q=Skewr+NYC+Park+South+reservation"
       }
-    ]
+    ],
+    "slug": "sk-wr",
+    "lastVerified": "2026-03-11"
   },
   {
     "id": 59,
@@ -1874,7 +1990,9 @@
         "name": "Google",
         "url": "https://www.google.com/search?q=Sushi+Yukimi+NYC+reservation"
       }
-    ]
+    ],
+    "slug": "sushi-yukimi",
+    "lastVerified": "2026-03-11"
   },
   {
     "id": 60,
@@ -1908,7 +2026,9 @@
         "name": "Google",
         "url": "https://www.google.com/search?q=Lumo+Ombro+NYC+Tribeca"
       }
-    ]
+    ],
+    "slug": "lumo-ombro",
+    "lastVerified": "2026-03-11"
   },
   {
     "id": 61,
@@ -1936,7 +2056,9 @@
         "name": "Walk-ins Only",
         "url": "https://www.google.com/search?q=Salt+Bread+Ko+NYC"
       }
-    ]
+    ],
+    "slug": "salt-bread-ko",
+    "lastVerified": "2026-03-11"
   },
   {
     "id": 62,
@@ -1969,7 +2091,9 @@
         "name": "Google",
         "url": "https://www.google.com/search?q=Hi+Dozo+Nakazawa+NYC"
       }
-    ]
+    ],
+    "slug": "hi-dozo-nakazawa",
+    "lastVerified": "2026-03-11"
   },
   {
     "id": 63,
@@ -1999,7 +2123,9 @@
         "name": "Coming Soon",
         "url": "https://www.google.com/search?q=Lou+Bevs+Brooklyn+Heights+NYC"
       }
-    ]
+    ],
+    "slug": "lou-bev-s",
+    "lastVerified": "2026-03-11"
   },
   {
     "id": 64,
@@ -2033,6 +2159,8 @@
         "name": "Google",
         "url": "https://www.google.com/search?q=Giardino+Giulietta+NYC+MetLife"
       }
-    ]
+    ],
+    "slug": "giardino-at-giulietta",
+    "lastVerified": "2026-03-11"
   }
 ]

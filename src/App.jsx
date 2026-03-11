@@ -569,6 +569,32 @@ const diffLabel   = d => ["","Easy","Moderate","Tricky","Hard","Very Hard"][d];
 const diffColor   = d => ["","#7dd3a8","#a8c96e","#e0b84a","#e08855","#d96060"][d];
 const priceClr    = p => ["","#a8d5b5","#7ec8a0","#4ea87a","#2d8a5a"][p];
 
+// "New this week" helper
+const isNewThisWeek = (r) => {
+  if (!r.openedDate) return false;
+  const now = new Date();
+  const diff = now - new Date(r.openedDate);
+  return diff >= 0 && diff < 7 * 24 * 60 * 60 * 1000;
+};
+
+// Slug-based restaurant lookup
+const restaurantBySlug = (slug) => RESTAURANTS_DEDUPED.find(r => r.slug === slug);
+
+// Google Maps directions URL
+const getDirectionsUrl = (r) => {
+  if (RESTAURANT_COORDS[r.id]) {
+    const [lat, lng] = RESTAURANT_COORDS[r.id];
+    return `https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}&destination_place_id=&travelmode=transit`;
+  }
+  return `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(r.address + ", Manhattan, NYC")}`;
+};
+
+// Share URL for a restaurant
+const getShareUrl = (r) => {
+  const base = window.location.origin + window.location.pathname;
+  return `${base}#/restaurant/${r.slug}`;
+};
+
 const CREAM="#ede0d8", CREAM_DIM="rgba(237,220,216,0.65)", CREAM_MID="rgba(237,220,216,0.46)",
       CREAM_SUB="rgba(237,220,216,0.28)", CREAM_FAINT="rgba(237,220,216,0.09)",
       ROSE_DIM="rgba(180,80,90,0.55)", ROSE_SUB="rgba(180,80,90,0.13)", ROSE_BDR="rgba(180,80,90,0.22)";
@@ -881,11 +907,12 @@ function RestaurantCard({ r, selected, onClick, wishlist, toggleWishlist, notifs
     <div data-card="" style={{ position:"relative", display:"flex", flexDirection:"column", height:"100%", transition:"transform 0.2s, box-shadow 0.2s" }}>
       {/* FRONT */}
       <div style={{ visibility:flipped?"hidden":"visible", pointerEvents:flipped?"none":"auto", position:flipped?"absolute":"relative", inset:0, borderRadius:14, overflow:"hidden", cursor:"pointer", background:"linear-gradient(180deg,rgba(8,5,10,0.97) 0%,rgba(6,4,8,0.99) 100%)", border:`1px solid ${isSel?"rgba(180,80,90,0.45)":"rgba(237,220,216,0.09)"}`, borderLeft:`3px solid ${color}` }} onClick={()=>{ if(!flipped) onClick(isSel?null:r); }}>
-        <div style={{ position:"relative", height:72, overflow:"hidden" }}>
-          <img src={svgSrc} alt="" style={{ width:"100%", height:"100%", objectFit:"cover", display:"block" }}/>
+        <div style={{ position:"relative", height:r.image?120:72, overflow:"hidden" }}>
+          <img src={r.image||svgSrc} alt="" style={{ width:"100%", height:"100%", objectFit:"cover", display:"block" }} crossOrigin={r.image?"anonymous":undefined}/>
           <div style={{ position:"absolute", inset:0, background:`linear-gradient(180deg,transparent 0%,rgba(8,5,10,0.88) 75%,rgba(8,5,10,1) 100%)` }}/>
 
           {!compact&&r.status==="coming_soon"&&<div style={{ position:"absolute", top:8, right:12, fontSize:9, fontWeight:700, letterSpacing:1, textTransform:"uppercase", color:"#c8b8f0", fontFamily:"'DM Sans',sans-serif", background:"rgba(80,60,140,0.7)", border:`1px solid rgba(160,140,200,0.4)`, padding:"2px 9px", borderRadius:20 }}>Opening Soon</div>}
+          {!compact&&isNewThisWeek(r)&&r.status==="open"&&<div style={{ position:"absolute", top:8, left:12, fontSize:9, fontWeight:700, letterSpacing:1, textTransform:"uppercase", color:"#7dd3a8", fontFamily:"'DM Sans',sans-serif", background:"rgba(30,100,50,0.7)", border:`1px solid rgba(80,180,100,0.4)`, padding:"2px 9px", borderRadius:20 }}>New This Week</div>}
           <div style={{ position:"absolute", bottom:7, right:12, fontSize:9, fontWeight:600, color:CREAM_SUB, fontFamily:"'DM Sans',sans-serif", background:"rgba(8,5,10,0.7)", padding:"2px 8px", borderRadius:20, border:`1px solid rgba(237,220,216,0.1)` }}>{r.opened}</div>
         </div>
         {isSel&&<div style={{ position:"absolute", top:0, left:14, right:14, height:1, background:`linear-gradient(90deg,transparent,rgba(237,220,216,0.3),transparent)` }}/>}
@@ -953,7 +980,10 @@ function RestaurantCard({ r, selected, onClick, wishlist, toggleWishlist, notifs
             <div style={{ display:"flex", gap:8, flexWrap:"wrap", alignItems:"center" }}>
               {r.homepage&&<a href={r.homepage} target="_blank" rel="noopener noreferrer" onClick={e=>e.stopPropagation()} style={{ background:"linear-gradient(135deg,rgba(80,60,100,0.45),rgba(50,35,70,0.6))", border:`1px solid rgba(160,140,200,0.35)`, borderRadius:20, color:"rgba(200,185,240,0.85)", padding:"6px 15px", fontSize:12, fontFamily:"'DM Sans',sans-serif", fontWeight:600, letterSpacing:0.4, textDecoration:"none", display:"inline-block" }}>Homepage ↗</a>}
               {r.bookingLinks.map(link=><a key={link.name} href={link.url} target="_blank" rel="noopener noreferrer" onClick={e=>e.stopPropagation()} style={{ background:"linear-gradient(135deg,rgba(150,48,62,0.44),rgba(90,20,32,0.6))", border:`1px solid rgba(180,80,90,0.4)`, borderRadius:20, color:CREAM_DIM, padding:"6px 15px", fontSize:12, fontFamily:"'DM Sans',sans-serif", fontWeight:600, letterSpacing:0.4, textDecoration:"none", display:"inline-block" }}>{link.name} ↗</a>)}
+              <a href={getDirectionsUrl(r)} target="_blank" rel="noopener noreferrer" onClick={e=>e.stopPropagation()} style={{ background:"linear-gradient(135deg,rgba(40,100,60,0.45),rgba(25,70,40,0.6))", border:`1px solid rgba(80,160,100,0.4)`, borderRadius:20, color:"rgba(160,220,180,0.9)", padding:"6px 15px", fontSize:12, fontFamily:"'DM Sans',sans-serif", fontWeight:600, letterSpacing:0.4, textDecoration:"none", display:"inline-block" }}>📍 Directions</a>
+              <button onClick={e=>{e.stopPropagation(); if(navigator.share){navigator.share({title:r.name,text:`Check out ${r.name} on NYC Hot Spot`,url:getShareUrl(r)})} else{navigator.clipboard.writeText(getShareUrl(r)).then(()=>alert("Link copied!"))}}} style={{ background:"rgba(237,220,216,0.06)", border:`1px solid rgba(237,220,216,0.18)`, borderRadius:20, color:CREAM_MID, padding:"6px 15px", fontSize:12, fontFamily:"'DM Sans',sans-serif", fontWeight:600, letterSpacing:0.4, cursor:"pointer", display:"inline-flex", alignItems:"center", gap:4 }}>🔗 Share</button>
             </div>
+            {r.lastVerified&&<div style={{ marginTop:8, fontSize:9, color:"rgba(237,220,216,0.25)", fontFamily:"'DM Sans',sans-serif" }}>Last verified: {new Date(r.lastVerified).toLocaleDateString("en-US",{month:"short",day:"numeric",year:"numeric"})}</div>}
             <div style={{ marginTop:12, borderTop:"1px solid rgba(237,220,216,0.07)", paddingTop:22, display:"flex", justifyContent:"center", gap:10, flexWrap:"wrap" }}>
               <button onClick={e=>{e.stopPropagation();toggleWishlist(r.id);}} style={{
                 display:"flex", alignItems:"center", gap:7,
@@ -1016,6 +1046,25 @@ function useIsDesktop(breakpoint = DESKTOP_BREAKPOINT) {
 
 export default function App() {
   const isDesktop = useIsDesktop();
+
+  // ── Hash-based deep linking ──────────────────────────────────────────
+  const [deepLinkedRestaurant, setDeepLinkedRestaurant] = useState(null);
+  useEffect(() => {
+    const handleHash = () => {
+      const hash = window.location.hash;
+      const match = hash.match(/^#\/restaurant\/(.+)$/);
+      if (match) {
+        const r = restaurantBySlug(decodeURIComponent(match[1]));
+        if (r) { setDeepLinkedRestaurant(r); setSelected(r); }
+      } else {
+        setDeepLinkedRestaurant(null);
+      }
+    };
+    handleHash();
+    window.addEventListener("hashchange", handleHash);
+    return () => window.removeEventListener("hashchange", handleHash);
+  }, []);
+
   // ── Persistent storage using artifact storage API ──────────────────────
   const [store, setStore] = React.useState({});
   const [storeReady, setStoreReady] = React.useState(false);
@@ -1044,6 +1093,22 @@ export default function App() {
     };
     load();
   }, []);
+
+  // ── Check if any reminded "coming soon" restaurants are now open ──
+  const [newlyOpenedAlerts, setNewlyOpenedAlerts] = useState([]);
+  useEffect(() => {
+    if (!storeReady) return;
+    const notifIds = store.notifs || [];
+    const nowOpen = RESTAURANTS_DEDUPED.filter(r =>
+      notifIds.includes(r.id) && r.status === "open" && r.openedDate
+    );
+    // Only show alerts for restaurants that opened in the last 14 days
+    const recent = nowOpen.filter(r => {
+      const diff = new Date() - new Date(r.openedDate);
+      return diff >= 0 && diff < 14 * 24 * 60 * 60 * 1000;
+    });
+    if (recent.length > 0) setNewlyOpenedAlerts(recent);
+  }, [storeReady, store.notifs]);
 
   const persist = async (key, value) => {
     const str = JSON.stringify(value);
@@ -1270,6 +1335,31 @@ export default function App() {
       )}
 
       <div style={{ maxWidth:isDesktop?1320:1080, margin:"0 auto", padding:isDesktop?"0 32px 48px":"0 20px 90px" }}>
+
+        {/* ── NEWLY OPENED ALERTS ── */}
+        {newlyOpenedAlerts.length>0&&(
+          <div style={{
+            background:"linear-gradient(135deg,rgba(30,100,50,0.15),rgba(20,70,35,0.2))",
+            border:"1px solid rgba(80,180,100,0.35)",
+            borderRadius:14, padding:"14px 18px", marginBottom:16,
+          }}>
+            <div style={{ display:"flex", justifyContent:"space-between", alignItems:"flex-start" }}>
+              <div>
+                <div style={{ fontSize:13, fontWeight:700, color:"rgba(120,210,140,0.95)", fontFamily:"'DM Sans',sans-serif", marginBottom:6 }}>
+                  🎉 Restaurants You Followed Just Opened!
+                </div>
+                {newlyOpenedAlerts.map(r=>(
+                  <div key={r.id} style={{ fontSize:12, color:"rgba(237,220,216,0.7)", fontFamily:"'DM Sans',sans-serif", marginBottom:4 }}>
+                    <b>{r.name}</b> in {r.neighborhood} is now open — <a href={r.homepage} target="_blank" rel="noopener noreferrer" style={{ color:"rgba(120,210,140,0.9)", textDecoration:"underline" }}>book now ↗</a>
+                  </div>
+                ))}
+              </div>
+              <button onClick={()=>setNewlyOpenedAlerts([])} style={{
+                background:"none", border:"none", color:"rgba(237,220,216,0.3)", fontSize:18, cursor:"pointer", padding:"0 4px", lineHeight:1,
+              }}>×</button>
+            </div>
+          </div>
+        )}
 
         {showAI&&(
           <div style={{ background:"linear-gradient(145deg,rgba(22,8,14,0.98),rgba(10,5,9,0.99))", border:`1px solid rgba(237,220,216,0.1)`, borderRadius:16, padding:"18px 22px", marginBottom:20 }}>
