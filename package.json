@@ -1,7 +1,7 @@
 {
   "name": "nyc-hotspot",
   "version": "1.0.0",
-  "homepage": "https://nickjohnm3-collab.github.io/nyc-hotspot",
+  "homepage": "https://nickjohnm3-collab.github.io/NYC-HOT-SPOT",
   "private": true,
   "dependencies": {
     "react": "^18.2.0",
