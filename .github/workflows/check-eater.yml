@@ -1,0 +1,42 @@
+name: Check NYC Food Sources for New Openings
+
+on:
+  schedule:
+    # Run every Monday and Thursday at 10am ET (2pm UTC)
+    - cron: '0 14 * * 1,4'
+  workflow_dispatch: # Allow manual trigger
+
+permissions:
+  contents: write
+  issues: write
+
+jobs:
+  check-feed:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Check Eater NY RSS feed
+        id: check
+        run: node scripts/check-eater-feed.js
+
+      - name: Create GitHub Issue
+        if: steps.check.outputs.has_new == 'true'
+        uses: peter-evans/create-issue-from-file@v5
+        with:
+          title: "🍽️ New NYC Restaurant Opening Articles Detected"
+          content-filepath: /tmp/issue-body.md
+          labels: |
+            restaurant-update
+            automated
+
+      - name: Commit updated seen list
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add .github/seen-articles.json
+          git diff --staged --quiet || git commit -m "Update seen articles list [skip ci]" && git push
