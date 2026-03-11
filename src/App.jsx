@@ -871,7 +871,7 @@ function NotifyMe({ restaurant, saved, onSave }) {
   );
 }
 
-function RestaurantCard({ r, selected, onClick, wishlist, toggleWishlist, notifs=[], saveNotif=()=>{}, compact=false }) {
+function RestaurantCard({ r, selected, onClick, wishlist, toggleWishlist, notifs=[], saveNotif=()=>{}, removeNotif=()=>{}, compact=false }) {
   const [flipped, setFlipped] = useState(false);
   const isSel = selected?.id === r.id;
   const color = hoodColor(r.neighborhood);
@@ -954,7 +954,7 @@ function RestaurantCard({ r, selected, onClick, wishlist, toggleWishlist, notifs
               {r.homepage&&<a href={r.homepage} target="_blank" rel="noopener noreferrer" onClick={e=>e.stopPropagation()} style={{ background:"linear-gradient(135deg,rgba(80,60,100,0.45),rgba(50,35,70,0.6))", border:`1px solid rgba(160,140,200,0.35)`, borderRadius:20, color:"rgba(200,185,240,0.85)", padding:"6px 15px", fontSize:12, fontFamily:"'DM Sans',sans-serif", fontWeight:600, letterSpacing:0.4, textDecoration:"none", display:"inline-block" }}>Homepage ↗</a>}
               {r.bookingLinks.map(link=><a key={link.name} href={link.url} target="_blank" rel="noopener noreferrer" onClick={e=>e.stopPropagation()} style={{ background:"linear-gradient(135deg,rgba(150,48,62,0.44),rgba(90,20,32,0.6))", border:`1px solid rgba(180,80,90,0.4)`, borderRadius:20, color:CREAM_DIM, padding:"6px 15px", fontSize:12, fontFamily:"'DM Sans',sans-serif", fontWeight:600, letterSpacing:0.4, textDecoration:"none", display:"inline-block" }}>{link.name} ↗</a>)}
             </div>
-            <div style={{ marginTop:12, borderTop:"1px solid rgba(237,220,216,0.07)", paddingTop:22, display:"flex", justifyContent:"center" }}>
+            <div style={{ marginTop:12, borderTop:"1px solid rgba(237,220,216,0.07)", paddingTop:22, display:"flex", justifyContent:"center", gap:10, flexWrap:"wrap" }}>
               <button onClick={e=>{e.stopPropagation();toggleWishlist(r.id);}} style={{
                 display:"flex", alignItems:"center", gap:7,
                 background:wishlist.includes(r.id)?"rgba(154,116,32,0.18)":"rgba(237,220,216,0.05)",
@@ -967,6 +967,19 @@ function RestaurantCard({ r, selected, onClick, wishlist, toggleWishlist, notifs
                 <span>{wishlist.includes(r.id)?"★":"☆"}</span>
                 {wishlist.includes(r.id)?"On Your Wish List":"Add to Wish List"}
               </button>
+              {notifs.includes(r.id)&&(
+                <button onClick={e=>{e.stopPropagation();removeNotif(r.id);}} style={{
+                  display:"flex", alignItems:"center", gap:7,
+                  background:"rgba(180,80,90,0.15)",
+                  border:"1px solid rgba(180,80,90,0.4)",
+                  borderRadius:24, padding:"8px 20px",
+                  fontSize:12, fontWeight:600, fontFamily:"'DM Sans',sans-serif",
+                  color:"rgba(210,130,145,0.9)",
+                  cursor:"pointer", transition:"all 0.2s",
+                }}>
+                  <span>🔕</span>Remove from Reminders
+                </button>
+              )}
             </div>
           </div>
         </div>
@@ -1172,7 +1185,7 @@ export default function App() {
             {/* Tabs */}
             <div style={{ display:"flex", borderBottom:`1px solid rgba(237,220,216,0.08)` }}>
               {[{key:"open",label:"Recently Opened",cnt:recentCount},{key:"coming_soon",label:"Coming Soon",cnt:soonCnt}].map((t,i)=>(
-                <button key={t.key} onClick={()=>setTab(t.key)} style={{ flex:1, border:"none", padding:"12px 20px", fontSize:13, fontWeight:600, cursor:"pointer", transition:"all 0.2s", fontFamily:"'DM Sans',sans-serif", background:tab===t.key?"linear-gradient(135deg,rgba(160,50,65,0.45),rgba(100,25,38,0.38))":"transparent", color:tab===t.key?CREAM:CREAM_SUB, borderRight:i===0?`1px solid rgba(237,220,216,0.08)`:"none" }}>
+                <button key={t.key} onClick={()=>setTab(t.key)} style={{ flex:1, border:"none", padding:"12px 20px", fontSize:13, fontWeight:600, cursor:"pointer", transition:"all 0.2s", fontFamily:"'DM Sans',sans-serif", background:tab===t.key?"linear-gradient(135deg,rgba(160,50,65,0.45),rgba(100,25,38,0.38))":"transparent", color:tab===t.key?CREAM:CREAM_SUB, borderRight:i===0?`1px solid rgba(237,220,216,0.08)`:"none", whiteSpace:"nowrap" }}>
                   {t.label}<span style={{ marginLeft:6, fontSize:10, fontWeight:700, background:"rgba(237,220,216,0.08)", padding:"1px 6px", borderRadius:8, color:tab===t.key?CREAM_MID:"rgba(237,220,216,0.22)" }}>{t.cnt}</span>
                 </button>
               ))}
@@ -1230,7 +1243,7 @@ export default function App() {
           <div style={{ display:"grid", gridTemplateColumns:"minmax(260px,1fr) minmax(300px,1.1fr)", gap:20, alignItems:"start" }}>
             <MapView restaurants={sorted} onSelect={r=>setSelected(selected?.id===r.id?null:r)} selected={selected}/>
             <div style={{ display:"flex", flexDirection:"column", gap:12, maxHeight:640, overflowY:"auto", paddingRight:4 }}>
-              {sorted.length===0?<div style={{ textAlign:"center", padding:"40px", color:CREAM_SUB }}>No results</div>:sorted.map(r=><RestaurantCard key={r.id} r={r} selected={selected} onClick={setSelected} wishlist={wishlist} toggleWishlist={toggleWishlist} notifs={store.notifs||[]} saveNotif={saveNotif}/>)}
+              {sorted.length===0?<div style={{ textAlign:"center", padding:"40px", color:CREAM_SUB }}>No results</div>:sorted.map(r=><RestaurantCard key={r.id} r={r} selected={selected} onClick={setSelected} wishlist={wishlist} toggleWishlist={toggleWishlist} notifs={store.notifs||[]} saveNotif={saveNotif} removeNotif={removeNotif}/>)}
             </div>
           </div>
         ):(
@@ -1243,7 +1256,7 @@ export default function App() {
             }}>
               {sorted.length===0
                 ?<div style={{ gridColumn:"1/-1", textAlign:"center", padding:"60px", color:CREAM_SUB, fontSize:16 }}>No establishments match your selection</div>
-                :sorted.map(r=><RestaurantCard key={r.id} r={r} selected={selected} onClick={setSelected} wishlist={wishlist} toggleWishlist={toggleWishlist} notifs={store.notifs||[]} saveNotif={saveNotif}/>)
+                :sorted.map(r=><RestaurantCard key={r.id} r={r} selected={selected} onClick={setSelected} wishlist={wishlist} toggleWishlist={toggleWishlist} notifs={store.notifs||[]} saveNotif={saveNotif} removeNotif={removeNotif}/>)
               }
             </div>
           </>
@@ -1267,7 +1280,7 @@ export default function App() {
             :<div style={{ display:"flex", flexDirection:"column", gap:12 }}>
               {reminderRestaurants.map(r=>(
                 <div key={r.id}>
-                  <RestaurantCard r={r} selected={null} onClick={()=>{}} wishlist={wishlist} toggleWishlist={toggleWishlist} notifs={store.notifs||[]} saveNotif={saveNotif} compact={true}/>
+                  <RestaurantCard r={r} selected={null} onClick={()=>{}} wishlist={wishlist} toggleWishlist={toggleWishlist} notifs={store.notifs||[]} saveNotif={saveNotif} removeNotif={removeNotif} compact={true}/>
                 </div>
               ))}
             </div>
@@ -1287,7 +1300,7 @@ export default function App() {
             :<div style={{ display:"flex", flexDirection:"column", gap:12 }}>
               {wishlistRestaurants.map(r=>(
                 <div key={r.id}>
-                  <RestaurantCard r={r} selected={null} onClick={()=>{}} wishlist={wishlist} toggleWishlist={toggleWishlist} notifs={store.notifs||[]} saveNotif={saveNotif} compact={true}/>
+                  <RestaurantCard r={r} selected={null} onClick={()=>{}} wishlist={wishlist} toggleWishlist={toggleWishlist} notifs={store.notifs||[]} saveNotif={saveNotif} removeNotif={removeNotif} compact={true}/>
                 </div>
               ))}
             </div>
@@ -1310,8 +1323,8 @@ export default function App() {
         padding:"10px 0 max(10px,env(safe-area-inset-bottom))",
       }}>
         {/* Home tab — custom SVG logo */}
-        <button onClick={()=>setMainView("home")} style={{ background:"none", border:"none", cursor:"pointer", display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center", gap:3, padding:"4px 20px", position:"relative" }}>
-          <svg width="34" height="34" viewBox="0 0 110 110" style={{ transition:"opacity 0.2s" }}>
+        <button onClick={()=>setMainView("home")} style={{ background:"none", border:"none", cursor:"pointer", display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"flex-end", gap:3, padding:"4px 20px", position:"relative", minHeight:50 }}>
+          <svg width="24" height="24" viewBox="0 0 110 110" style={{ transition:"opacity 0.2s" }}>
 
             <text x="55" y="68" fontFamily="Georgia,serif" fontSize="52" fontStyle="italic" fontWeight="700" fill={mainView==="home"?"#e8a8b8":"rgba(237,220,216,0.65)"} textAnchor="middle" letterSpacing="-3">HS</text>
             <path d="M79 12 C78 7, 75 5, 76 2 C74 4, 72 8, 73 12 C73 15, 75 17, 74 20 C76 18, 79 15, 79 12 Z" fill={mainView==="home"?"#ff6020":"rgba(237,220,216,0.55)"} opacity="0.95"/>
@@ -1328,10 +1341,10 @@ export default function App() {
         ].map(({key,icon,label,badge})=>(
           <button key={key} onClick={()=>setMainView(key)} style={{
             background:"none", border:"none", cursor:"pointer",
-            display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center", gap:3,
-            padding:"4px 20px", position:"relative",
+            display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"flex-end", gap:3,
+            padding:"4px 20px", position:"relative", minHeight:50,
           }}>
-            <span style={{ fontSize:22, lineHeight:1, filter:mainView===key?"none":"grayscale(1) opacity(0.4)" }}>{icon}</span>
+            <span style={{ fontSize:22, lineHeight:1, filter:mainView===key?"none":"grayscale(1) opacity(0.4)", display:"flex", alignItems:"center", justifyContent:"center", height:24 }}>{icon}</span>
             <span style={{ fontSize:10, fontWeight:600, letterSpacing:0.8, fontFamily:"'DM Sans',sans-serif", color:mainView===key?"rgba(212,176,80,0.95)":"rgba(237,220,216,0.3)", transition:"color 0.2s" }}>{label}</span>
             {badge>0&&<span style={{ position:"absolute", top:0, right:10, background:"rgba(180,80,90,0.9)", color:"#fff", fontSize:9, fontWeight:700, borderRadius:"50%", width:14, height:14, display:"flex", alignItems:"center", justifyContent:"center", fontFamily:"'DM Sans',sans-serif" }}>{badge}</span>}
           </button>
