@@ -1001,7 +1001,8 @@ function RestaurantCard({ r, selected, onClick, wishlist, toggleWishlist, notifs
 }
 
 // ── Desktop detection hook ─────────────────────────────────────────────
-function useIsDesktop(breakpoint = 768) {
+const DESKTOP_BREAKPOINT = 768;
+function useIsDesktop(breakpoint = DESKTOP_BREAKPOINT) {
   const [isDesktop, setIsDesktop] = useState(() => typeof window !== "undefined" && window.matchMedia(`(min-width: ${breakpoint}px)`).matches);
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -1145,6 +1146,13 @@ export default function App() {
   const wishlistRestaurants = RESTAURANTS_DEDUPED.filter(r => wishlist.includes(r.id));
   const reminderRestaurants = RESTAURANTS_DEDUPED.filter(r => (store.notifs || []).includes(r.id));
 
+  // Shared nav items used by both desktop header and mobile bottom bar
+  const navItems = [
+    { key:"home", label:"Home", icon:(<svg width="18" height="18" viewBox="0 0 110 110"><text x="55" y="68" fontFamily="Georgia,serif" fontSize="52" fontStyle="italic" fontWeight="700" fill={mainView==="home"?"#e8a8b8":"rgba(237,220,216,0.5)"} textAnchor="middle" letterSpacing="-3">HS</text></svg>) },
+    { key:"reminders", label:"Reminders", icon:"🔔", badge:reminderRestaurants.length },
+    { key:"wishlist", label:"Wish List", icon:"★", badge:wishlist.length },
+  ];
+
   const handleAIUpdate = useCallback(async()=>{
     setAiLoading(true);setAiResults(null);setAiError(null);setShowAI(true);
     try{
@@ -1189,18 +1197,17 @@ export default function App() {
           {/* Right: desktop navigation */}
           {isDesktop&&(
             <nav style={{ display:"flex", alignItems:"center", gap:4 }}>
-              {[
-                { key:"home", label:"Home", icon:(<svg width="18" height="18" viewBox="0 0 110 110"><text x="55" y="68" fontFamily="Georgia,serif" fontSize="52" fontStyle="italic" fontWeight="700" fill={mainView==="home"?"#e8a8b8":"rgba(237,220,216,0.5)"} textAnchor="middle" letterSpacing="-3">HS</text></svg>) },
-                { key:"reminders", label:"Reminders", icon:"🔔", badge:reminderRestaurants.length },
-                { key:"wishlist", label:"Wish List", icon:"★", badge:wishlist.length },
-              ].map(({key,label,icon,badge})=>(
+              {navItems.map(({key,label,icon,badge})=>(
                 <button key={key} onClick={()=>setMainView(key)} style={{
                   background:mainView===key?"rgba(180,80,90,0.18)":"transparent",
                   border:`1px solid ${mainView===key?"rgba(180,80,90,0.4)":"transparent"}`,
                   borderRadius:10, padding:"8px 18px",
                   cursor:"pointer", display:"flex", alignItems:"center", gap:8, position:"relative",
                   transition:"all 0.2s",
-                }}>
+                }}
+                onMouseEnter={e=>{if(mainView!==key)e.currentTarget.style.background="rgba(237,220,216,0.06)"}}
+                onMouseLeave={e=>{if(mainView!==key)e.currentTarget.style.background="transparent"}}
+                >
                   <span style={{ fontSize:16, lineHeight:1, display:"flex", alignItems:"center", filter:mainView===key?"none":"grayscale(1) opacity(0.5)" }}>{icon}</span>
                   <span style={{ fontSize:13, fontWeight:600, letterSpacing:0.5, fontFamily:"'DM Sans',sans-serif", color:mainView===key?"rgba(212,176,80,0.95)":"rgba(237,220,216,0.45)", transition:"color 0.2s" }}>{label}</span>
                   {badge>0&&<span style={{ background:"rgba(180,80,90,0.9)", color:"#fff", fontSize:9, fontWeight:700, borderRadius:"50%", width:16, height:16, display:"flex", alignItems:"center", justifyContent:"center", fontFamily:"'DM Sans',sans-serif" }}>{badge}</span>}
@@ -1443,29 +1450,13 @@ export default function App() {
         display:"flex", justifyContent:"space-around", alignItems:"stretch",
         padding:"10px 0 max(10px,env(safe-area-inset-bottom))",
       }}>
-        {/* Home tab — custom SVG logo */}
-        <button onClick={()=>setMainView("home")} style={{ background:"none", border:"none", cursor:"pointer", display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"flex-end", gap:3, padding:"4px 20px", position:"relative", minHeight:50 }}>
-          <svg width="24" height="24" viewBox="0 0 110 110" style={{ transition:"opacity 0.2s" }}>
-
-            <text x="55" y="68" fontFamily="Georgia,serif" fontSize="52" fontStyle="italic" fontWeight="700" fill={mainView==="home"?"#e8a8b8":"rgba(237,220,216,0.65)"} textAnchor="middle" letterSpacing="-3">HS</text>
-            <path d="M79 12 C78 7, 75 5, 76 2 C74 4, 72 8, 73 12 C73 15, 75 17, 74 20 C76 18, 79 15, 79 12 Z" fill={mainView==="home"?"#ff6020":"rgba(237,220,216,0.55)"} opacity="0.95"/>
-            <line x1="22" y1="76" x2="88" y2="76" stroke={mainView==="home"?"rgba(192,50,88,0.6)":"rgba(237,220,216,0.3)"} strokeWidth="1.5"/>
-            <text x="55" y="92" fontFamily="Georgia,serif" fontSize="14" fontWeight="700" fill={mainView==="home"?"#e8a8b8":"rgba(237,220,216,0.65)"} textAnchor="middle" letterSpacing="6">NYC</text>
-          </svg>
-          <span style={{ fontSize:10, fontWeight:600, letterSpacing:0.8, fontFamily:"'DM Sans',sans-serif", color:mainView==="home"?"rgba(212,176,80,0.95)":"rgba(237,220,216,0.3)", transition:"color 0.2s" }}>Home</span>
-        </button>
-
-        {/* Reminders + Wish List tabs */}
-        {[
-          { key:"reminders", icon:"🔔", label:"Reminders", badge:reminderRestaurants.length },
-          { key:"wishlist",  icon:"★",  label:"Wish List", badge:wishlist.length },
-        ].map(({key,icon,label,badge})=>(
+        {navItems.map(({key,label,icon,badge})=>(
           <button key={key} onClick={()=>setMainView(key)} style={{
             background:"none", border:"none", cursor:"pointer",
             display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"flex-end", gap:3,
             padding:"4px 20px", position:"relative", minHeight:50,
           }}>
-            <span style={{ fontSize:22, lineHeight:1, filter:mainView===key?"none":"grayscale(1) opacity(0.4)", display:"flex", alignItems:"center", justifyContent:"center", height:24 }}>{icon}</span>
+            <span style={{ fontSize:22, lineHeight:1, filter:mainView===key?"none":"grayscale(1) opacity(0.4)", display:"flex", alignItems:"center", justifyContent:"center", height:24 }}>{typeof icon==="object"?icon:icon}</span>
             <span style={{ fontSize:10, fontWeight:600, letterSpacing:0.8, fontFamily:"'DM Sans',sans-serif", color:mainView===key?"rgba(212,176,80,0.95)":"rgba(237,220,216,0.3)", transition:"color 0.2s" }}>{label}</span>
             {badge>0&&<span style={{ position:"absolute", top:0, right:10, background:"rgba(180,80,90,0.9)", color:"#fff", fontSize:9, fontWeight:700, borderRadius:"50%", width:14, height:14, display:"flex", alignItems:"center", justifyContent:"center", fontFamily:"'DM Sans',sans-serif" }}>{badge}</span>}
           </button>
@@ -1483,7 +1474,7 @@ export default function App() {
         select:focus { border-color:rgba(237,220,216,0.28)!important; outline:none; }
         a:hover { opacity:0.82; } button:hover { opacity:0.88; }
         @media(max-width:640px){ div[style*="grid-template-columns: minmax(260px"]{grid-template-columns:1fr!important;} }
-        @media(min-width:768px){
+        @media(min-width:${DESKTOP_BREAKPOINT}px){
           [data-card]:hover { transform:translateY(-2px); box-shadow:0 8px 24px rgba(0,0,0,0.3); }
         }
       `}</style>
