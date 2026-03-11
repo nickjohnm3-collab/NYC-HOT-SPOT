@@ -878,7 +878,7 @@ function RestaurantCard({ r, selected, onClick, wishlist, toggleWishlist, notifs
   const svgSrc = makeCuisineSVG(r.cuisine, color);
 
   return (
-    <div style={{ position:"relative", display:"flex", flexDirection:"column", height:"100%" }}>
+    <div data-card="" style={{ position:"relative", display:"flex", flexDirection:"column", height:"100%", transition:"transform 0.2s, box-shadow 0.2s" }}>
       {/* FRONT */}
       <div style={{ visibility:flipped?"hidden":"visible", pointerEvents:flipped?"none":"auto", position:flipped?"absolute":"relative", inset:0, borderRadius:14, overflow:"hidden", cursor:"pointer", background:"linear-gradient(180deg,rgba(8,5,10,0.97) 0%,rgba(6,4,8,0.99) 100%)", border:`1px solid ${isSel?"rgba(180,80,90,0.45)":"rgba(237,220,216,0.09)"}`, borderLeft:`3px solid ${color}` }} onClick={()=>{ if(!flipped) onClick(isSel?null:r); }}>
         <div style={{ position:"relative", height:72, overflow:"hidden" }}>
@@ -1402,8 +1402,7 @@ export default function App() {
         a:hover { opacity:0.82; } button:hover { opacity:0.88; }
         @media(max-width:640px){ div[style*="grid-template-columns: minmax(260px"]{grid-template-columns:1fr!important;} }
         @media(min-width:768px){
-          button:hover { opacity:0.92; transform:translateY(-1px); }
-          a:hover { opacity:0.88; }
+          [data-card]:hover { transform:translateY(-2px); box-shadow:0 8px 24px rgba(0,0,0,0.3); }
         }
       `}</style>
     </div>
