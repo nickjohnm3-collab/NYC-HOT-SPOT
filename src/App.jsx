@@ -979,7 +979,6 @@ function RestaurantCard({ r, selected, onClick, wishlist, toggleWishlist, notifs
                 }}>
                   <span>🔕</span>Remove from Reminders
                 </button>
-                </button>
               ):(
                 <button onClick={e=>{e.stopPropagation();saveNotif(r.id);}} style={{
                   display:"flex", alignItems:"center", gap:7,
