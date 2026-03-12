@@ -1225,7 +1225,7 @@ export default function App() {
     saveWishlist(next);
   };
   const wishlistRestaurants = RESTAURANTS_DEDUPED.filter(r => wishlist.includes(r.id));
-  const reminderRestaurants = RESTAURANTS_DEDUPED.filter(r => (store.notifs || []).includes(r.id));
+  const reminderRestaurants = RESTAURANTS_DEDUPED.filter(r => (store.notifs || []).includes(r.id) && r.status === "coming_soon");
 
   // Shared nav items used by both desktop header and mobile bottom bar
   const navItems = [
