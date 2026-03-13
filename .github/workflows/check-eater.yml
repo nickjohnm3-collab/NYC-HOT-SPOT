@@ -1,9 +1,9 @@
-name: Check NYC Food Sources for New Openings
+name: Daily NYC Restaurant Source Scraper
 
 on:
   schedule:
-    # Run every Monday and Thursday at 10am ET (2pm UTC)
-    - cron: '0 14 * * 1,4'
+    # Run daily at 10am ET (2pm UTC)
+    - cron: '0 14 * * *'
   workflow_dispatch: # Allow manual trigger
 
 permissions:
@@ -20,7 +20,7 @@ jobs:
         with:
           node-version: 20
 
-      - name: Check Eater NY RSS feed
+      - name: Scrape NYC restaurant sources
         id: check
         run: node scripts/check-eater-feed.js
 

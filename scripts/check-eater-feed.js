@@ -1,4 +1,5 @@
 const https = require("https");
+const http = require("http");
 const fs = require("fs");
 
 // Feed sources to monitor
@@ -7,6 +8,9 @@ const FEEDS = [
   { name: "Eater NY", url: "https://ny.eater.com/rss/index.xml", format: "atom" },
   { name: "Grub Street", url: "https://feeds.feedburner.com/nymag/grubstreet", format: "rss" },
   { name: "Resy (New on Resy)", url: "https://blog.resy.com/category/new-on-resy/feed/", format: "rss" },
+  { name: "Gothamist Food", url: "https://gothamist.com/food/feed", format: "rss" },
+  { name: "The Infatuation NYC", url: "https://www.theinfatuation.com/new-york/feed", format: "rss" },
+  { name: "NY Post Dining", url: "https://nypost.com/tag/restaurants/feed/", format: "rss" },
 ];
 
 // Keywords that signal a restaurant opening article
@@ -23,7 +27,8 @@ function fetchFeed(url) {
   return new Promise((resolve, reject) => {
     const follow = (u, depth = 0) => {
       if (depth > 5) return reject(new Error("Too many redirects"));
-      https.get(u, (res) => {
+      const client = u.startsWith("https") ? https : http;
+      client.get(u, (res) => {
         if (res.statusCode >= 300 && res.statusCode < 400 && res.headers.location) {
           return follow(res.headers.location, depth + 1);
         }
@@ -89,6 +94,16 @@ function saveSeen(seen) {
   fs.writeFileSync(SEEN_FILE, JSON.stringify(seen, null, 2));
 }
 
+function setOutput(name, value) {
+  const outputFile = process.env.GITHUB_OUTPUT;
+  if (outputFile) {
+    fs.appendFileSync(outputFile, `${name}=${value}\n`);
+  } else {
+    // Fallback for local testing
+    console.log(`Output: ${name}=${value}`);
+  }
+}
+
 async function main() {
   const seen = loadSeen();
   let allNewItems = [];
@@ -117,7 +132,7 @@ async function main() {
 
   if (allNewItems.length === 0) {
     console.log("No new opening articles found.");
-    console.log("::set-output name=has_new::false");
+    setOutput("has_new", "false");
     return;
   }
 
@@ -141,7 +156,7 @@ async function main() {
   }
 
   body += "\n**Action needed:** Review these articles and add any noteworthy restaurants to `src/App.jsx`.\n";
-  body += "\n*Sources monitored: Eater NY, Grub Street (NY Mag), Resy (New on Resy). Time Out NY has no RSS feed.*\n";
+  body += "\n*Sources monitored daily: Eater NY, Grub Street (NY Mag), Resy (New on Resy), Gothamist Food, The Infatuation NYC, NY Post Dining. Time Out NY has no RSS feed.*\n";
 
   // Write issue body to file for the GitHub Action to use
   fs.writeFileSync("/tmp/issue-body.md", body);
@@ -153,8 +168,8 @@ async function main() {
   console.log(`Updated seen list (${updatedSeen.length} total)`);
 
   // Output for GitHub Actions
-  console.log("::set-output name=has_new::true");
-  console.log(`::set-output name=count::${allNewItems.length}`);
+  setOutput("has_new", "true");
+  setOutput("count", String(allNewItems.length));
 }
 
 main().catch((err) => {
