@@ -539,6 +539,55 @@ function makeCuisineSVG(cuisine, color) {
   )}`;
 }
 
+// ── Cuisine photo mapping (Unsplash) ──────────────────────────────────────
+const CUISINE_PHOTOS = {
+  sushi:       "photo-1559410545-0bdcd187e0a6",
+  omakase:     "photo-1559410545-0bdcd187e0a6",
+  japanese:    "photo-1579871494447-9811cf80d66c",
+  ramen:       "photo-1569050467447-ce54b3bbc37d",
+  noodle:      "photo-1569050467447-ce54b3bbc37d",
+  korean:      "photo-1590301157890-4d75d5eda59d",
+  italian:     "photo-1555396273-367ea4eb4db5",
+  pasta:       "photo-1555396273-367ea4eb4db5",
+  pizza:       "photo-1565299624946-b28f40a0ae38",
+  steakhouse:  "photo-1546964124-0cce460e13b3",
+  steak:       "photo-1546964124-0cce460e13b3",
+  seafood:     "photo-1559715745-8555f2793bb4",
+  indian:      "photo-1585937421612-70a008356c36",
+  thai:        "photo-1562802378-063ec186a863",
+  mexican:     "photo-1565299585323-38d6b0865b47",
+  chinese:     "photo-1563245372-f67a2a3e6c38",
+  asian:       "photo-1563245372-f67a2a3e6c38",
+  vietnamese:  "photo-1583623025817-d180a2221d0a",
+  french:      "photo-1414235077428-338989a2e8c0",
+  mediterranean: "photo-1504674900247-0877df9cc836",
+  spanish:     "photo-1515443961218-a51367888e4b",
+  greek:       "photo-1504674900247-0877df9cc836",
+  caribbean:   "photo-1547592180-85f173990554",
+  filipino:    "photo-1547592180-85f173990554",
+  bar:         "photo-1551538827-9c037cb4f32a",
+  cocktail:    "photo-1551538827-9c037cb4f32a",
+  wine:        "photo-1510812431401-41d2bd2722f3",
+  bakery:      "photo-1549465220-1a629bed9e5b",
+  café:        "photo-1549465220-1a629bed9e5b",
+  cafe:        "photo-1549465220-1a629bed9e5b",
+  american:    "photo-1568901346375-23c9450c58cd",
+  british:     "photo-1414235077428-338989a2e8c0",
+  african:     "photo-1547592180-85f173990554",
+};
+
+const CUISINE_PHOTO_DEFAULT = "photo-1414235077428-338989a2e8c0";
+
+function getCuisinePhoto(cuisine) {
+  const c = (cuisine || "").toLowerCase();
+  for (const [key, id] of Object.entries(CUISINE_PHOTOS)) {
+    if (c.includes(key)) {
+      return `https://images.unsplash.com/${id}?w=800&h=400&fit=crop&auto=format&q=80`;
+    }
+  }
+  return `https://images.unsplash.com/${CUISINE_PHOTO_DEFAULT}?w=800&h=400&fit=crop&auto=format&q=80`;
+}
+
 // ── Six-month window ───────────────────────────────────────────────────────
 const TODAY = new Date();
 const SIX_MONTHS_AGO = new Date(new Date().setMonth(new Date().getMonth() - 6));
@@ -912,16 +961,62 @@ function NotifyMe({ restaurant, saved, onSave }) {
 
 function RestaurantCard({ r, selected, onClick, wishlist, toggleWishlist, notifs=[], saveNotif=()=>{}, removeNotif=()=>{}, compact=false }) {
   const [flipped, setFlipped] = useState(false);
+  const [googlePhoto, setGooglePhoto] = useState(() => {
+    try { return localStorage.getItem(`nyc_hs_photo_${r.id}`) || null; } catch { return null; }
+  });
   const isSel = selected?.id === r.id;
   const color = hoodColor(r.neighborhood);
   const svgSrc = makeCuisineSVG(r.cuisine, color);
+  const cuisinePhoto = getCuisinePhoto(r.cuisine);
+
+  useEffect(() => {
+    const apiKey = process.env.REACT_APP_GOOGLE_MAPS_API_KEY;
+    if (!apiKey) return;
+    const cacheKey = `nyc_hs_photo_${r.id}`;
+    try { if (localStorage.getItem(cacheKey)) return; } catch {}
+    let cancelled = false;
+    fetch("https://places.googleapis.com/v1/places:searchText", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-Goog-Api-Key": apiKey,
+        "X-Goog-FieldMask": "places.photos",
+      },
+      body: JSON.stringify({
+        textQuery: `${r.name} ${r.neighborhood} Manhattan New York`,
+        maxResultCount: 1,
+        locationBias: {
+          circle: {
+            center: { latitude: 40.7128, longitude: -74.006 },
+            radius: 20000.0,
+          },
+        },
+      }),
+    })
+      .then(res => res.json())
+      .then(data => {
+        if (cancelled) return;
+        const photoName = data.places?.[0]?.photos?.[0]?.name;
+        if (photoName) {
+          const url = `https://places.googleapis.com/v1/${photoName}/media?maxWidthPx=800&key=${apiKey}`;
+          setGooglePhoto(url);
+          try { localStorage.setItem(cacheKey, url); } catch {}
+        }
+      })
+      .catch(err => {
+        if (process.env.NODE_ENV !== "production") console.warn("[NYC Hot Spot] Google Places photo fetch failed:", err);
+      });
+    return () => { cancelled = true; };
+  }, [r.id, r.name, r.neighborhood]);
+
+  const imageSrc = r.image || googlePhoto || cuisinePhoto;
 
   return (
     <div data-card="" style={{ position:"relative", display:"flex", flexDirection:"column", height:"100%", transition:"transform 0.2s, box-shadow 0.2s" }}>
       {/* FRONT */}
       <div style={{ visibility:flipped?"hidden":"visible", pointerEvents:flipped?"none":"auto", position:flipped?"absolute":"relative", inset:0, borderRadius:14, overflow:"hidden", cursor:"pointer", background:"linear-gradient(180deg,rgba(8,5,10,0.97) 0%,rgba(6,4,8,0.99) 100%)", border:`1px solid ${isSel?"rgba(180,80,90,0.45)":"rgba(237,220,216,0.09)"}`, borderLeft:`3px solid ${color}` }} onClick={()=>{ if(!flipped) onClick(isSel?null:r); }}>
-        <div style={{ position:"relative", height:r.image?120:72, overflow:"hidden" }}>
-          <img src={r.image||svgSrc} alt="" style={{ width:"100%", height:"100%", objectFit:"cover", display:"block" }} crossOrigin={r.image?"anonymous":undefined}/>
+        <div style={{ position:"relative", height:160, overflow:"hidden" }}>
+          <img src={imageSrc} alt={r.cuisine} style={{ width:"100%", height:"100%", objectFit:"cover", display:"block" }} onError={e=>{ e.currentTarget.onerror=null; e.currentTarget.src=svgSrc; }}/>
           <div style={{ position:"absolute", inset:0, background:`linear-gradient(180deg,transparent 0%,rgba(8,5,10,0.88) 75%,rgba(8,5,10,1) 100%)` }}/>
 
           {!compact&&r.status==="coming_soon"&&<div style={{ position:"absolute", top:8, right:12, fontSize:9, fontWeight:700, letterSpacing:1, textTransform:"uppercase", color:"#c8b8f0", fontFamily:"'DM Sans',sans-serif", background:"rgba(80,60,140,0.7)", border:`1px solid rgba(160,140,200,0.4)`, padding:"2px 9px", borderRadius:20 }}>Opening Soon</div>}
