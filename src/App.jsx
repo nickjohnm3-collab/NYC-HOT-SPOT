@@ -961,17 +961,62 @@ function NotifyMe({ restaurant, saved, onSave }) {
 
 function RestaurantCard({ r, selected, onClick, wishlist, toggleWishlist, notifs=[], saveNotif=()=>{}, removeNotif=()=>{}, compact=false }) {
   const [flipped, setFlipped] = useState(false);
+  const [googlePhoto, setGooglePhoto] = useState(() => {
+    try { return localStorage.getItem(`nyc_hs_photo_${r.id}`) || null; } catch { return null; }
+  });
   const isSel = selected?.id === r.id;
   const color = hoodColor(r.neighborhood);
   const svgSrc = makeCuisineSVG(r.cuisine, color);
   const cuisinePhoto = getCuisinePhoto(r.cuisine);
+
+  useEffect(() => {
+    const apiKey = process.env.REACT_APP_GOOGLE_MAPS_API_KEY;
+    if (!apiKey) return;
+    const cacheKey = `nyc_hs_photo_${r.id}`;
+    try { if (localStorage.getItem(cacheKey)) return; } catch {}
+    let cancelled = false;
+    fetch("https://places.googleapis.com/v1/places:searchText", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-Goog-Api-Key": apiKey,
+        "X-Goog-FieldMask": "places.photos",
+      },
+      body: JSON.stringify({
+        textQuery: `${r.name} ${r.neighborhood} Manhattan New York`,
+        maxResultCount: 1,
+        locationBias: {
+          circle: {
+            center: { latitude: 40.7128, longitude: -74.006 },
+            radius: 20000.0,
+          },
+        },
+      }),
+    })
+      .then(res => res.json())
+      .then(data => {
+        if (cancelled) return;
+        const photoName = data.places?.[0]?.photos?.[0]?.name;
+        if (photoName) {
+          const url = `https://places.googleapis.com/v1/${photoName}/media?maxWidthPx=800&key=${apiKey}`;
+          setGooglePhoto(url);
+          try { localStorage.setItem(cacheKey, url); } catch {}
+        }
+      })
+      .catch(err => {
+        if (process.env.NODE_ENV !== "production") console.warn("[NYC Hot Spot] Google Places photo fetch failed:", err);
+      });
+    return () => { cancelled = true; };
+  }, [r.id, r.name, r.neighborhood]);
+
+  const imageSrc = r.image || googlePhoto || cuisinePhoto;
 
   return (
     <div data-card="" style={{ position:"relative", display:"flex", flexDirection:"column", height:"100%", transition:"transform 0.2s, box-shadow 0.2s" }}>
       {/* FRONT */}
       <div style={{ visibility:flipped?"hidden":"visible", pointerEvents:flipped?"none":"auto", position:flipped?"absolute":"relative", inset:0, borderRadius:14, overflow:"hidden", cursor:"pointer", background:"linear-gradient(180deg,rgba(8,5,10,0.97) 0%,rgba(6,4,8,0.99) 100%)", border:`1px solid ${isSel?"rgba(180,80,90,0.45)":"rgba(237,220,216,0.09)"}`, borderLeft:`3px solid ${color}` }} onClick={()=>{ if(!flipped) onClick(isSel?null:r); }}>
         <div style={{ position:"relative", height:160, overflow:"hidden" }}>
-          <img src={r.image||cuisinePhoto} alt={r.cuisine} style={{ width:"100%", height:"100%", objectFit:"cover", display:"block" }} crossOrigin="anonymous" onError={e=>{ e.currentTarget.onerror=null; e.currentTarget.src=svgSrc; }}/>
+          <img src={imageSrc} alt={r.cuisine} style={{ width:"100%", height:"100%", objectFit:"cover", display:"block" }} onError={e=>{ e.currentTarget.onerror=null; e.currentTarget.src=svgSrc; }}/>
           <div style={{ position:"absolute", inset:0, background:`linear-gradient(180deg,transparent 0%,rgba(8,5,10,0.88) 75%,rgba(8,5,10,1) 100%)` }}/>
 
           {!compact&&r.status==="coming_soon"&&<div style={{ position:"absolute", top:8, right:12, fontSize:9, fontWeight:700, letterSpacing:1, textTransform:"uppercase", color:"#c8b8f0", fontFamily:"'DM Sans',sans-serif", background:"rgba(80,60,140,0.7)", border:`1px solid rgba(160,140,200,0.4)`, padding:"2px 9px", borderRadius:20 }}>Opening Soon</div>}
