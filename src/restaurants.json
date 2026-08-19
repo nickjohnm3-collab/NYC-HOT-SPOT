@@ -2556,5 +2556,36 @@
     ],
     "slug": "conwell-hall",
     "lastVerified": "2026-03-11"
+  },
+  {
+    "id": 77,
+    "name": "Honey Badger",
+    "neighborhood": "Prospect Lefferts Gardens",
+    "cuisine": "Wild-to-Table Tasting Menu",
+    "price": 4,
+    "difficulty": 5,
+    "opened": "Mar 2026",
+    "openedDate": "2026-03-13",
+    "status": "open",
+    "address": "67 Fenimore St, Brooklyn",
+    "vibe": "Intimate & Avant-Garde",
+    "isBar": false,
+    "reservation": "Resy (Prepaid)",
+    "dressCode": "Smart Casual",
+    "mealPeriods": ["Dinner"],
+    "homepage": "https://www.honeybadgerbk.com",
+    "chef": "Co-owners Fjölla Sheholli and Junayd Juman reopened their provocative Brooklyn tasting-menu restaurant with a newly upgraded fermentation lab led by Jason Ignacio White, formerly head of fermentation at Noma. The 13-course wild-to-table menu shifts with the seasons, featuring foraged game, seaweeds, and forest aromatics.",
+    "bookingLinks": [
+      {
+        "name": "Resy",
+        "url": "https://resy.com/cities/new-york-ny/venues/honey-badger"
+      },
+      {
+        "name": "Google",
+        "url": "https://www.google.com/search?q=Honey+Badger+Brooklyn+restaurant+reservation"
+      }
+    ],
+    "slug": "honey-badger",
+    "lastVerified": "2026-03-15"
   }
 ]
